@@ -2,21 +2,21 @@ Package: ubcBIOL548L
 Title: UBC Graduate Course for Data Visualization
 Version: 0.0.0.9000
 Authors@R: 
+    c(person(given = "Andrea",
+           family = "Gaede",
+           role = c("aut", "cre"),
+           email = "andrea.gaede@gmail.com",
+           comment = c(ORCID = "0000-0002-1909-7004")),
     person(given = "Vikram",
            family = "Baliga",
            role = c("aut"),
            email = "vbaliga87@gmail.com",
-           comment = c(ORCID = "0000-0002-9367-8974"))
-    person(given = "Andrea",
-           family = "Gaede",
-           role = c("aut", "cre"),
-           email = "andrea.gaede@gmail.com",
-           comment = c(ORCID = "0000-0002-1909-7004"))
+           comment = c(ORCID = "0000-0002-9367-8974")),
     person(given = "Shree",
            family = "Senthivasan",
            role = c("aut"),
            email = "shreeramsenti@gmail.com",
-           comment = c(ORCID = "0000-0002-7118-9547"))           
+           comment = c(ORCID = "0000-0002-7118-9547")))           
 Description: Tutorial that walks students of different skill levels through a 
   series of data wrangling and visualization exercises. The goal is to make sure 
   students are comfortable using packages within the tidyverse, along with 
