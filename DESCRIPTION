@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person(given = "Vikram",
            family = "Baliga",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "vbaliga87@gmail.com",
            comment = c(ORCID = "0000-0002-9367-8974"))
     person(given = "Andrea",
@@ -14,7 +14,7 @@ Authors@R:
            comment = c(ORCID = "0000-0002-1909-7004"))
     person(given = "Shree",
            family = "Senthivasan",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "shreeramsenti@gmail.com",
            comment = c(ORCID = "0000-0002-7118-9547"))           
 Description: Tutorial that walks students of different skill levels through a 
