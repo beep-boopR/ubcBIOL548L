@@ -1,0 +1,223 @@
+---
+title: "BIOL548L R workshop - group 1"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{group-01}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ubcBIOL548L)
+
+library(gapminder)
+library(tidyverse)
+library(readxl)
+```
+
+## Introduction
+
+This is an R workshop created for a graduate data visualization course at the University of British Columbia by Vikram Baliga, Andrea Gaede and Shreeram Senthivasan.  
+
+There are three groups with increasing levels of difficulty. Each group has a set of learning objectives.
+
+## Group 1: Load a clean data file into R and make boxplots and scatterplots
+
+### Learning Objectives:
+1. Determine how to import and control data stored in different filetypes
+2. Understand the best practices for structuring data in *tidyverse/ggplot*
+3. Construct basic plots using *ggplot*
+
+### Lesson:  
+#### Importing data:
+**Import data using base R command, and give it the name `my_data`**
+```{r}
+my_data <- read.csv("gapminder.csv")
+# In practise, read_csv() is often better
+
+```
+
+**Take a look at your data**
+```{r eval=FALSE}
+# Same as print(my_data)
+my_data
+```
+
+```{r}
+# Structure
+str(my_data)
+# Summarize columns
+summary(my_data)
+# Get column names (good for wide datasets)
+names(my_data)
+# Get first 6 lines
+head(my_data)
+# Get last 6 lines
+tail(my_data)
+```
+
+**Arguments can be added to a function using commas**  
+**Note:** arguments with the default setting are hidden, unless specified. Here n changes the default from 6 to 10 lines
+```{r}
+head(my_data, n = 10)
+```
+
+**The helpfile lists what arguments are available**
+```{r, eval=FALSE}
+?head
+```
+
+
+**A better import option using Tidyverse**
+```{r}
+my_data <- read_csv("gapminder.csv")
+# Cleaner import and print with read_csv, don't need head()
+my_data
+# Note that words read in as `chr` not `factors`, this is good!
+str(my_data)
+# But underlying data is the same
+summary(my_data)
+```
+**Other formats for import**
+```{r}
+my_data <- read_delim("gapminder.csv", ',')
+# Looks like a weird error
+my_data <- read_excel("gapminder.xlsx")
+```
+
+**Ways to clean up your data during import**
+```{r}
+# Inspect with head, or excel. We see two junk rows:
+head(my_data)
+
+# This can be solved by adding an argument `skip` is the number of rows to skip
+my_data <- read_excel("gapminder.xlsx",
+                   skip = 2)
+
+my_data <- read_csv("gapminder.csv",col_names = FALSE)
+# Setting `col_names` to false made the column headers row one and added dummy column names
+my_data
+```
+
+```{r}
+# We're now going to import the gapminder dataset using the preferred read_csv() function
+my_data <- read_csv("gapminder.csv",col_names = TRUE)
+```
+```{r}
+# This looks correct. Note: TRUE is the default so was not needed above
+my_data
+```
+
+#### Plotting:  
+**Make a histogram**
+```{r}
+# This command makes a histogram of the `lifeExp` column of the `my_data` dataset
+qplot(x = lifeExp, data = my_data)
+```
+```{r}
+# The same function here makes a scatter plot
+qplot(x = gdpPercap, y = lifeExp, data = my_data)
+```
+```{r}
+# The same function here makes a dot plot because the x axis is categorical
+qplot(x = continent, y = lifeExp, data = my_data)
+```
+
+**How can the same function make three different classes of plots?**  
+One of the hidden arguments is `geom` which specifies the type of plot. The default is `auto` which leads to a guess of the plot type based on the
+data type(s) in the column(s) you specify.  
+
+Type `?qplot` in the console to read the `qplot` documentation
+
+**Now let's specify the type of plot explicitly**
+```{r}
+qplot(x = lifeExp, data = my_data, geom = 'histogram')
+qplot(x = gdpPercap, y = lifeExp, data = my_data, geom = 'point')
+```
+```{r}
+# Note that we are now specifying boxplot instead of point plot
+qplot(x = continent, y = lifeExp, data = my_data, geom = 'boxplot')
+```
+
+**Now let's change the number of bins in a histogram and make the plot prettier**
+```{r}
+# The hidden argument `bins` has a default valute of 30
+qplot(x = lifeExp, data = my_data, geom = 'histogram')
+```
+```{r}
+# This changes the number of bins to 10
+qplot(x = lifeExp, bins = 10, data = my_data, geom = 'histogram')
+```
+```{r}
+# Alternatively you can choose the width you want the bins to have
+qplot(x = lifeExp, binwidth = 5, data = my_data, geom = 'histogram')
+```
+```{r}
+# Let's add a title
+qplot(x = lifeExp, binwidth = 5, main = "Histogram of life expectancy", data = my_data, geom = 'histogram')
+```
+```{r}
+# Let's add an x axis label
+qplot(x = lifeExp, binwidth = 5, main = "Histogram of life expectancy", xlab = "Life expectancy (years)", data = my_data, geom = 'histogram')
+```
+```{r}
+# Let's add a y axis label
+qplot(x = lifeExp, binwidth = 5, main = "Histogram of life expectancy", xlab = "Life expectancy (years)", ylab = "Count", data = my_data, geom = 'histogram')
+```
+```{r}
+# This format is easier to read, but otherwise exactly the same.
+# The convention is to break lines after commas.
+qplot(x = lifeExp,
+      binwidth = 5,
+      main = "Histogram of life expectancy",
+      xlab = "Life expectancy (years)",
+      ylab = "Count",
+      data = my_data,
+      geom = 'histogram')
+```
+
+**Let's apply a log scale and add a trendline to a scatter plot**
+```{r, warning=FALSE}
+# Note that x axis is compressed
+qplot(x = gdpPercap, y = lifeExp, data = my_data, geom = 'point')
+# Here the x axis is log transformed
+qplot(x = gdpPercap, 
+      y = lifeExp, 
+      log = 'x',
+      data = my_data, 
+      geom = 'point')
+
+# Let's add a trendline to the data as well.
+# The linear regression model (`lm`) will be added on top of our previous plot
+qplot(x = gdpPercap,
+      y = lifeExp,
+      log = 'x',
+      main = "Scatter plot of life expectancy versus GDP per capita",
+      xlab = "Log-transformed GDP per capita ($)",
+      ylab = "Life expectancy (years)",
+      data = my_data,
+      # The following line adds a `smooth` trendline
+      # We want our regression to be a linear model, or `lm`
+      method = 'lm',
+      # the `c()` function allows us to pass multiple variables
+      # to the `geom` argument
+      geom = c('point','smooth'))
+```
+
+**Finally let's make a boxplot**
+```{r}
+qplot(x = continent,
+      y = lifeExp,
+      main = "Boxplot of life expectancy by continent",
+      xlab = "Continent",
+      ylab = "Life expectancy (years)",
+      data = my_data,
+      geom = 'boxplot')
+```

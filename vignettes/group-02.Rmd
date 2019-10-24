@@ -1,0 +1,19 @@
+---
+title: "group-02"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{group-02}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ubcBIOL548L)
+```

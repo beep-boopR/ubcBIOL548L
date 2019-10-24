@@ -24,3 +24,7 @@ Description: Tutorial that walks students of different skill levels through a
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
