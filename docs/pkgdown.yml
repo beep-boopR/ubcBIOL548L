@@ -1,5 +1,8 @@
 pandoc: 2.3.1
 pkgdown: 1.4.1
 pkgdown_sha: ~
-articles: []
+articles:
+  group-01: group-01.html
+  group-02: group-02.html
+  group-03: group-03.html
 

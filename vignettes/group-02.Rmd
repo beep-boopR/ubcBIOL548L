@@ -1,5 +1,5 @@
 ---
-title: "group-02"
+title: "BIOL548L R workshop - group 2"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{group-02}
@@ -16,4 +16,1017 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(ubcBIOL548L)
+
+library(gapminder)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(tibble)
+library(readr)
+library(forcats)
+library(readxl)
+
+library(ggthemes)
+library(magick)
+library(grid)
+library(cowplot)
+
+library(ggmap)
+library(maps)
+
 ```
+
+
+## Introduction
+
+This is an R workshop created for a graduate data visualization course at the University of British Columbia by Vikram Baliga, Andrea Gaede and Shreeram Senthivasan.  
+
+There are three groups with increasing levels of difficulty. Each group has a set of learning opjectives.
+
+## Group 2: Learn how to structure data to produce single plots that are ready for presentations and publications
+
+### Learning Objectives:
+1. Articulate the advantages of literate programming
+2. Employ piping to restructure data for tidyverse
+3. Describe the grammar of graphics that underlies plotting in ggplot
+4. Manipulate plots to improve clarity and maximize the data : ink ratio
+
+### Lesson:  
+#### What is literate programming?
+
+Literate programming is a coding paradigm that rethinks the "grammar" of traditional code to more closely resemble writing in a human language, like English.  
+
+The primary goal of literate programming is to move away from coding "for computers" (ie, code that simplifies compilation) and instead to write in a way that more resembles how we think.  
+
+In addition to making for much more readable code even with fewer comments, a good literate coding language should make it easier for you to translate ideas into code.  
+
+In the tidyverse, we will largely use the analogy of variables as nouns and functions as verbs that operate on the nouns.  
+
+The main way we will make our code literate however is with the pipe: %>%  
+
+#### What is a pipe? 
+A pipe, or %>% , is an operator that takes everything on the left and plugs it into the function on the right.  
+
+In short: x %>% f(y)  is equivalent to  f(x, y)  
+
+```{r}
+# So:
+filter(gapminder, continent == 'Asia')
+
+# Can be re-written as:
+gapminder %>%
+  filter(continent == 'Asia')
+```
+In RStudio you can use the shortcut CTRL/CMD + SHIFT + M to insert a pipe  
+
+#### Why bother with pipes?  
+To see how pipes can make code more readable, let's translate this simple cake recipe into pseudo R code:
+
+1. Cream together sugar and butter
+2. Beat in eggs and vanilla
+3. Mix in flour and baking powder
+4. Stir in milk
+5. Bake
+6. Frost
+
+**Saving Intermediate Steps:**  
+One way you might approach coding this is by defining a lot of variables:  
+```{r, eval=FALSE}
+batter_1   <- cream(sugar, butter)  
+batter_2   <- beat_in(batter_1, eggs, vanilla)  
+batter_3   <- mix_in(batter_2, flour, baking_powder)  
+batter_4   <- stir_in(batter_3, milk)  
+cake       <- bake(batter_3)  
+cake_final <- frost(cake)  
+```
+The info is all there, but there's a lot of repetition and opportunity for typos. You also have to jump back and forth between lines to make sure you're calling the right variables.  
+
+A similar approach would be to keep overwriting a single variable:  
+```{r, eval = FALSE}
+cake <- cream(sugar, butter)  
+cake <- beat_in(cake, eggs, vanilla)  
+cake <- mix_in(cake, flour, baking_powder)  
+cake <- stir_in(cake, milk)  
+cake <- bake(cake)  
+cake <- frost(cake)  
+```
+But it's still not as clear as the original recipe...And if anything goes wrong you have to re-run the whole pipeline.
+
+**Function Composition:**  
+If we don't want to save intermediates, we can just do all the steps in one line:  
+
+```{r, eval = FALSE}
+frost(bake(stir_in(mix_in(beat_in(cream(sugar, butter), eggs, vanilla), flour, baking_powder), milk)))  
+```
+Or with better indentation:  
+```{r, eval=FALSE}
+frost(  
+    bake(  
+      stir_in(  
+        mix_in(  
+          beat_in(  
+            cream(sugar, butter),  
+            eggs,  
+            vanilla  
+          ),  
+          flour, baking_powder  
+        ),  
+      milk)  
+    )  
+  )  
+```
+It's pretty clear why this is no good  
+
+#### Piping
+
+**Now for the piping approach:**  
+```{r, eval=FALSE}
+cake <-  
+    cream(sugar, butter) %>%  
+    beat_in(eggs, vanilla) %>%  
+    mix_in(flour, baking_powder) %>%  
+    stir_in(milk) %>%  
+    bake() %>%  
+    frost()  
+```
+When you are reading code, you can replace pipes with the phrase "and then."  
+
+And remember, pipes just take everything on the left and plug it into the function on the right. If you step through this code, this chunk is exactly the same as the function composition example above, it's just written for people to read.  
+
+When you chain together multiple manipulations, piping makes it easy to focus on what's important at every step. One caveat is that you need the first argument of every function in the pipe to be the object you are manipulating. Tidyverse functions all follow this convention, as do many other functions.  
+
+**Where do you find new verbs?**  
+
+The RStudio cheat sheets are a whole lot more useful once you start piping -- here are a few:
+
+[Data transformation]("https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf")
+
+[Data import + restructuring]("https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf")
+
+[Other cheat sheets]("https://www.rstudio.com/resources/cheatsheets/")
+
+#### Some prep work for the coding part of the lesson:
+In this section our main goal will be to reproduce as closely as possible all the individual plots that make up Figure 3 in the [Gaede et al. 2017 paper](https://www.cell.com/current-biology/fulltext/S0960-9822(16)31394-X).  
+
+The one exception to that will be the legends and icons, which are easier to align and arrange when organizing the plots into a single multipanel figure, which is left for Group 3.  
+
+Let's start by opening up the paper and setting up some variables we will be using throughout the plotting.  
+
+**Colours for the different birds**  
+```{r}
+col_hb <- "#ED0080"
+col_zb <- "#F48D00"
+col_pg <- "#4AA4F2"
+```
+
+#### Fig 3 Panel D: 
+```{r}
+data_D <- read_csv("gaedeetal_data/Fig3D_data.csv")
+
+# Visualize data
+data_D
+```
+
+**Anatomy of a ggplot**  
+`ggplot` is built around the idea of a "Grammar of Graphics" -- a way of describing (almost) any graphic.  
+
+There are three key components to any graphic under the Grammar of Graphics:
+
+* Data: the information to be conveyed
+* Geometries: the things you actually draw on the plot (lines, points, polygons, etc...)
+* Aesthetic mapping: the connection between relevant parts of the data and the aesthetics (size, colour, position, etc...) of the geometries  
+
+Any ggplot you make will at the very minimum require these three things and will usually look something like this:
+```{r, eval=FALSE}
+ggplot(data = my_data, mapping = aes(x = var1, y = var2)) +
+  geom_point()
+```
+
+Or, equivalently:
+```{r, eval=FALSE}
+my_data %>%
+  ggplot(aes(x = var1, y = var2)) +
+  geom_point()
+```
+But how do you know what geometries are available or what aesthetic mappings you can use for each?  
+Use the [plotting with ggplot2 cheat sheet]("https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf")
+
+Other possibly relevant componenets include:  
+
+* Coordinate systems (eg cartesian vs polar plots)
+* Scales (eg mapping specifc colours to groups)
+* Facets (subpanels of similar plots)
+
+**Let's make a ggplot!**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(mapping = aes(x = perc_firing, y = num_bins, colour = species))
+```
+
+**Add points:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(mapping = aes(x = perc_firing, y = num_bins, colour = species)) +
+    geom_point(mapping = aes(shape = species))
+```
+
+**Separate points:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, colour = species)) +
+    geom_point(aes(shape = species), position = 'jitter')
+```
+
+**Add summary statistics:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, colour = species)) +
+    geom_point(aes(shape = species), position = 'jitter') +
+    geom_boxplot()
+```
+
+**Fix x axis:**
+```{r, warning=FALSE}
+data_D <- read_csv("gaedeetal_data/Fig3D_data.csv") %>%
+  mutate(
+    perc_firing = perc_firing * 100,
+    perc_firing = as_factor(perc_firing)
+  )
+```
+
+**Re-plot with new x:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, colour = species)) +
+    geom_point(aes(shape = species), position = 'jitter') +
+    geom_boxplot()
+```
+
+**Swap colour to fill:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_point(aes(shape = species), position = 'jitter') +
+    geom_boxplot()
+```
+
+**Fix colours:**
+```{r, warning=FALSE}
+# browseURL("http://www.sthda.com/english/wiki/ggplot2-point-shapes")
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_point(aes(shape = species), position = 'jitter') +
+    geom_boxplot() +
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    scale_shape_manual(values = c(24, 21))
+```
+
+**De-emphasize boxplots, remove outliers**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_boxplot(alpha = 0.5, outlier.size = 0) +
+    geom_point(aes(shape = species), position = 'jitter') +
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    scale_shape_manual(values = c(24, 21))
+```
+
+**Tune jitter:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_boxplot(alpha = 0.5, outlier.size = 0) +
+    geom_point(
+      aes(shape = species),
+      position = position_jitterdodge(jitter.height = 0.3, jitter.width = 0.2)
+    ) +
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    scale_shape_manual(values = c(24, 21))
+```
+
+**Titles and theming and save:**
+```{r, warning=FALSE}
+fig_D <- data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_boxplot(alpha = 0.5, outlier.size = 0) +
+    geom_point(
+      aes(shape = species),
+      position = position_jitterdodge(jitter.height = 0.3, jitter.width = 0.2)
+    ) +
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    scale_shape_manual(values = c(24, 21)) +
+    labs(
+      x = "Percent of maximum firing rate (threshold)",
+      y = "Number of speed bins above threshold"
+    ) +
+    # theme_bw()
+    # theme_light()
+    # theme_dark()
+    theme_classic()
+fig_D
+```
+
+**Let's create a theme:**
+```{r, warning=FALSE}
+theme_548 <- theme_classic() +
+    theme(
+      axis.title = element_text(size = 13),
+      axis.text = element_text(size = 13, colour = "black"),
+      axis.line = element_blank()
+    )
+```
+
+**Let's see what it looks like**
+```{r, warning=FALSE}
+fig_D + theme_548
+```
+
+**Let's create a theme:**
+```{r, warning=FALSE}
+theme_548 <- theme_classic() +
+    theme(
+      # Text
+      axis.title = element_text(size = 13),
+      axis.text = element_text(size = 13, colour = "black"),
+      axis.text.x = element_text(margin = margin(t = 10, unit = "pt")),
+      axis.text.y = element_text(margin = margin(r = 10)),
+      # Axis line
+      axis.line = element_blank(),
+      axis.ticks.length = unit(-5,"pt"),
+      # Legend
+      legend.position = 'none',
+      # Background transparency
+        # Background of panel
+      panel.background = element_rect(fill = "transparent"),
+        # Background behind actual data points
+      plot.background = element_rect(fill = "transparent", color = NA)
+    )
+
+fig_D + theme_548
+```
+
+**Draw in x and y axes:**
+```{r, warning=FALSE}
+data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_boxplot(alpha = 0.5, outlier.size = 0) +
+    geom_point(
+      aes(shape = species),
+      position = position_jitterdodge(jitter.height = 0.3, jitter.width = 0.2)
+    ) +
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    scale_shape_manual(values = c(24, 21)) +
+    labs(
+      x = "Percent of maximum firing rate (threshold)",
+      y = "Number of speed bins above threshold"
+    ) +
+    theme_548 +
+    ggthemes::geom_rangeframe()
+```
+
+**Draw in x and y axes:**
+```{r, warning=FALSE}
+fig_D <- data_D %>%
+  ggplot(aes(x = perc_firing, y = num_bins, fill = species)) +
+    geom_boxplot(alpha = 0.5, outlier.size = 0) +
+    geom_point(
+      aes(shape = species),
+      position = position_jitterdodge(jitter.height = 0.3, jitter.width = 0.2)
+    ) +
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    scale_shape_manual(values = c(24, 21)) +
+    labs(
+      x = "Percent of maximum firing rate (threshold)",
+      y = "Number of speed bins above threshold"
+    ) +
+    theme_548 +
+    geom_rangeframe() +
+    annotate(geom = "segment", x = 0, xend = 0, y = 2.5, yend = 10)
+fig_D
+```
+
+#### Fig 3 Panel E:
+**Visualize the data:**
+```{r}
+read_csv("./gaedeetal_data/Fig3E_data.csv")
+```
+
+**Restructure data for plotting:**
+```{r, warning=FALSE}
+# Add the missing info
+read_csv("./gaedeetal_data/Fig3E_data.csv") %>%
+  mutate(species = c("hb", "zb", "pg"))
+
+# Pull the y-values down from the header
+data_E <- read_csv("./gaedeetal_data/Fig3E_data.csv") %>%
+  mutate(species = c("hb", "zb", "pg")) %>%
+  gather(key = speed, value = prop, -species)
+data_E
+```
+
+**Plot data:**
+```{r, warning=FALSE}
+data_E %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    geom_col()
+
+# But wait, the x-axis and species are out of order!
+data_E
+
+data_E <- data_E %>%
+  mutate(
+    species = fct_relevel(species, c("hb","zb","pg")),
+    speed = as_factor(as.numeric(speed))
+  )
+data_E
+```
+
+**Plot data again!**
+```{r, warning=FALSE}
+data_E %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    geom_col()
+
+# Unstack columns and add black outline
+data_E %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    geom_col(position = 'dodge', colour = "black")
+
+# Space out column groups, thin out the columns, thin the outline
+data_E %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    geom_col(
+      position = position_dodge(0.75),
+      width = 0.75,
+      size = 0.2,
+      colour = "black"
+    )
+```
+
+**Pick colours, add labels, add theme:**
+```{r, warning=FALSE}
+data_E %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    geom_col(
+      position = position_dodge(0.75),
+      width = 0.75,
+      size = 0.2,
+      colour = "black"
+    ) +
+    scale_fill_manual(values = c(col_hb, col_zb, col_pg)) +
+    labs(
+      x = "Speed bins (degrees/s)",
+      y = "Proportion of LM\ncell population"
+    )+
+    theme_548
+```
+
+**Fix x axis, add y axis line:**
+```{r, warning=FALSE}
+fig_E <- data_E %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    # Plot data
+    geom_col(
+      position = position_dodge(0.75),
+      width = 0.75,
+      size = 0.2,
+      colour = "black"
+    ) +
+    # Pick colours
+    scale_fill_manual(values = c(col_hb, col_zb, col_pg)) +
+    # Text
+    labs(
+      x = "Speed bins (degrees/s)",
+      y = "Proportion of LM\ncell population"
+    )+
+    # Theme
+    theme_548 +
+    # Axes
+    theme(
+      axis.ticks.x = element_blank(),
+      axis.text.x = element_text(margin = margin(t = 0))
+    ) +
+    geom_rangeframe(sides = 'l')
+fig_E
+```
+
+#### Fig 3 Panel B:
+**Visualize data:**
+```{r}
+read_csv("gaedeetal_data/Fig3B_data.csv")
+```
+
+**Gather all the bin data into one column:**
+```{r}
+read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+  gather(key = bin, value = count, starts_with("bin"))
+```
+
+**Group the data by trial, direction speed:**
+```{r}
+read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+  gather(key = bin, value = count, starts_with("bin")) %>%
+  group_by(trial, direction, speed)
+```
+
+**Calculate firing rate for each trial:**
+```{r, warning=FALSE}
+read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+  gather(key = bin, value = count, starts_with("bin")) %>%
+  group_by(trial, direction, speed) %>%
+  summarize(
+    raw_firing_rate = mean(count)
+  )
+```
+
+**Finally let's ungroup and store this unnormalized data:**
+```{r}
+data_B_raw <- read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+  gather(key = bin, value = count, starts_with("bin")) %>%
+  group_by(trial, direction, speed) %>%
+  summarize(
+    raw_firing_rate = mean(count)
+  ) %>%
+  ungroup()
+data_B_raw
+```
+
+**Now we need to normalize the data:**
+```{r, warning=FALSE}
+# First calculate a baseline
+tail(data_B_raw)
+
+data_B_raw %>%
+  filter(direction == 'NaN')
+
+data_B_raw %>%
+  filter(direction == 'NaN') %>%
+  pull(raw_firing_rate)
+
+baseline <- data_B_raw %>%
+  filter(direction == 'NaN') %>%
+  pull(raw_firing_rate) %>%
+  mean
+baseline
+
+# Use the baseline to normalize the data
+data_B_raw %>%
+  filter(direction != 'NaN') %>%
+  mutate(
+    norm_firing_rate = raw_firing_rate - baseline,
+    norm_firing_rate = norm_firing_rate / max(abs(norm_firing_rate))
+  )
+```
+
+**Next let's find the mean and SE of firing rate across like trials:**
+```{r, warning=FALSE}
+data_B_raw %>%
+  filter(direction != 'NaN') %>%
+  mutate(
+    norm_firing_rate = raw_firing_rate - baseline,
+    norm_firing_rate = norm_firing_rate / max(abs(norm_firing_rate))
+  ) %>%
+  group_by(direction, speed) %>%
+  summarize(
+    firing_rate = mean(norm_firing_rate),
+    sem = sd(norm_firing_rate) / sqrt(n())
+  )
+```
+
+**Finally ungroup the data and convert direction to a factor:**
+```{r, warning=FALSE}
+data_B <- data_B_raw %>%
+  filter(direction != 'NaN') %>%
+  mutate(
+    norm_firing_rate = raw_firing_rate - baseline,
+    norm_firing_rate = norm_firing_rate / max(abs(norm_firing_rate))
+  ) %>%
+  group_by(direction, speed) %>%
+  summarize(
+    firing_rate = mean(norm_firing_rate),
+    sem = sd(norm_firing_rate) / sqrt(n())
+  ) %>%
+  ungroup() %>%
+  mutate(direction = as_factor(direction))
+data_B
+```
+
+**Plot the data!**
+```{r, warning=FALSE}
+data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    geom_point(aes(colour = direction, shape = direction)) +
+    geom_line(aes(colour = direction))
+```
+
+**Add error bars and threshold line:**
+```{r, warning=FALSE}
+data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    geom_point(aes(colour = direction, shape = direction)) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_hline(
+      yintercept = 0.8 * max(data_B$firing_rate),
+      colour = 'grey70',
+      linetype = 'dashed'
+    )
+
+```
+
+**Add a line segment indicating points over threshold:**
+```{r, warning=FALSE}
+data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    geom_point(aes(colour = direction, shape = direction)) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_hline(
+      yintercept = 0.8 * max(data_B$firing_rate),
+      colour = 'grey70',
+      linetype = 'dashed'
+    ) +
+    annotate(
+      geom = 'segment',
+      x = 1.3,
+      xend = 1.78,
+      y = 1.2,
+      yend = 1.2,
+      size = 0.7,
+      arrow = arrow(ends = 'both', length = unit(2, "pt"), angle = 90)
+    )
+```
+
+**Set colours, shapes, labels, and themes:**
+```{r, warning=FALSE}
+data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    geom_point(aes(colour = direction, shape = direction)) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_hline(
+      yintercept = 0.8 * max(data_B$firing_rate),
+      colour = 'grey70',
+      linetype = 'dashed'
+    ) +
+    annotate(
+      geom = 'segment',
+      x = 1.3, xend = 1.78,
+      y = 1.2, yend = 1.2,
+      size = 0.7,
+      arrow = arrow(ends = 'both', length = unit(2, "pt"), angle = 90)
+    ) +
+    scale_colour_manual(values = c("black", "grey50")) +
+    scale_shape_manual(values = c(15, 18)) +
+    labs(y = "Normalized\nfiring rate", x = "") +
+    theme_548
+```
+
+**Make the diamonds bigger, reorder layers to emphasize points, remove x axis title:**
+```{r, warning=FALSE}
+data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    geom_hline(
+      yintercept = 0.8 * max(data_B$firing_rate),
+      colour = 'grey70',
+      linetype = 'dashed'
+    ) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_point(aes(colour = direction, shape = direction, size = direction)) +
+    annotate(
+      geom = 'segment',
+      x = 1.3, xend = 1.78,
+      y = 1.2, yend = 1.2,
+      size = 0.7,
+      arrow = arrow(ends = 'both', length = unit(2, "pt"), angle = 90)
+    ) +
+    scale_colour_manual(values = c("black", "grey50")) +
+    scale_shape_manual(values = c(15, 18)) +
+    scale_size_manual(values = c(2, 3)) +
+    labs(y = "Normalized\nfiring rate", x = "") +
+    theme(axis.title.x = element_blank()) +
+    theme_548
+```
+
+**Add axis lines:**
+```{r, warning=FALSE}
+data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    geom_hline(
+      yintercept = 0.8 * max(data_B$firing_rate),
+      colour = 'grey70',
+      linetype = 'dashed'
+    ) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_point(aes(colour = direction, shape = direction, size = direction)) +
+    annotate(
+      geom = 'segment',
+      x = 1.3, xend = 1.78,
+      y = 1.2, yend = 1.2,
+      size = 0.7,
+      arrow = arrow(ends = 'both', length = unit(2, "pt"), angle = 90)
+    ) +
+    scale_colour_manual(values = c("black", "grey50")) +
+    scale_shape_manual(values = c(15, 18)) +
+    scale_size_manual(values = c(2, 3)) +
+    labs(y = "Normalized\nfiring rate", x = "") +
+    theme(axis.title.x = element_blank()) +
+    theme_548 +
+    geom_rangeframe()
+```
+
+**Note the line lengths, y limits, and x breaks are all wrong**  
+To fudge the lines, let's make another dataset:
+```{r, warning=FALSE}
+fudge_axis_BC <- tibble(speed = c(-0.5,2), firing_rate = c(-1,2))
+fudge_axis_BC
+
+fig_B <- data_B %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    # Plot data and threshold
+    geom_hline(
+      yintercept = 0.8 * max(data_B$firing_rate),
+      colour = 'grey70',
+      linetype = 'dashed'
+    ) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_point(aes(colour = direction, shape = direction, size = direction)) +
+    # Annotate points over threshold
+    annotate(
+      geom = 'segment',
+      x = 1.3, xend = 1.78,
+      y = 1.2, yend = 1.2,
+      size = 0.7,
+      arrow = arrow(ends = 'both', length = unit(2, "pt"), angle = 90)
+    ) +
+    # Select colours and shapes
+    scale_colour_manual(values = c("black", "grey50")) +
+    scale_shape_manual(values = c(15, 18)) +
+    scale_size_manual(values = c(2, 3)) +
+    # Text
+    labs(y = "Normalized\nfiring rate", x = "") +
+    # Theme
+    theme_548 +
+    # Axes
+    geom_rangeframe(data = fudge_axis_BC) +
+    lims(y = c(-1,2)) +
+    scale_x_continuous(breaks = -1:4 / 2)
+fig_B
+```
+
+
+#### Fig 3 Panel F:
+**Visualize data:**
+```{r}
+read_csv("./gaedeetal_data/Fig3F_data.csv")
+speeds_F <- c(0.24,0.5,1,2,4,8,16,24,32,48,64,80)
+```
+
+**Remove any rows without data (dir1.area is NA):**
+```{r}
+read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+  filter(!is.na(dir1.area))
+```
+
+**Remove unnecessary columns:**
+```{r}
+read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+  filter(!is.na(dir1.area))  %>%
+  select(starts_with("sp"))
+```
+
+**Rename columns using speeds_F, change species to words:**
+```{r}
+read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+  filter(!is.na(dir1.area))  %>%
+  select(starts_with("sp")) %>%
+  rename_all(~c("species",as.character(speeds_F))) %>%
+  mutate(
+    species = case_when(
+      species == 1 ~ "zb",
+      species == 2 ~ "hb"
+    )
+  )
+```
+
+**Reshape data for plotting:**
+```{r}
+read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+  filter(!is.na(dir1.area))  %>%
+  select(starts_with("sp")) %>%
+  rename_all(~c("species",as.character(speeds_F))) %>%
+  mutate(
+    species = case_when(
+      species == 1 ~ "zb",
+      species == 2 ~ "hb"
+    )
+  ) %>%
+  gather(key = speed, value = prop, -species)
+```
+
+**Summarize proporions by species and speed:**
+```{r}
+read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+  filter(!is.na(dir1.area))  %>%
+  select(starts_with("sp")) %>%
+  rename_all(~c("species",as.character(speeds_F))) %>%
+  mutate(
+    species = case_when(
+      species == 1 ~ "zb",
+      species == 2 ~ "hb"
+    )
+  ) %>%
+  gather(key = speed, value = prop, -species) %>%
+  group_by(species, speed) %>%
+  summarise(prop = mean(prop)) %>%
+  ungroup
+```
+
+**Finally fix the factor levels as before:**
+```{r}
+data_F <- read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+  filter(!is.na(dir1.area))  %>%
+  select(starts_with("sp")) %>%
+  rename_all(~c("species",as.character(speeds_F))) %>%
+  mutate(
+    species = case_when(
+      species == 1 ~ "zb",
+      species == 2 ~ "hb"
+    )
+  ) %>%
+  gather(key = speed, value = prop, -species) %>%
+  group_by(species, speed) %>%
+  summarise(prop = mean(prop)) %>%
+  ungroup %>%
+  mutate(
+    species = fct_relevel(species, c('hb', 'zb')),
+    speed = as_factor(as.numeric(speed))
+  )
+data_F
+```
+
+**Plot data as before:**
+```{r}
+fig_F <- data_F %>%
+  ggplot(aes(x = speed, y = prop, fill = species)) +
+    # Plot data
+    geom_col(
+      position = position_dodge(0.75),
+      width = 0.75,
+      size = 0.2,
+      colour = "black"
+    ) +
+    # Pick colours
+    scale_fill_manual(values = c(col_hb, col_zb)) +
+    # Text
+    labs(
+      x = "Speed bins (degrees/s)",
+      y = "Proportion of LM\ncell population"
+    ) +
+    # Theme
+    theme_548 +
+    # Axes
+    theme(
+      axis.ticks.x = element_blank(),
+      axis.text.x = element_text(margin = margin(t = 0))
+    ) +
+    geom_rangeframe(sides = 'l')
+fig_F
+```
+
+#### Fig 3 Panel C:
+**Reorganize raw data:**
+```{r}
+data_C_raw <- read_csv("gaedeetal_data/Fig3C_data.csv") %>%
+  gather(key = bin, value = count, starts_with("bin")) %>%
+  group_by(trial, direction, speed) %>%
+  summarize(
+    raw_firing_rate = mean(count)
+  ) %>%
+  ungroup()
+data_C_raw
+```
+
+**Calculate baseline:**
+```{r}
+baseline <- data_C_raw %>%
+  filter(direction == 'NaN') %>%
+  pull(raw_firing_rate) %>%
+  mean
+baseline
+```
+
+**Normalize data and calculate mean, SE:**
+```{r}
+data_C <- data_C_raw %>%
+  filter(direction != 'NaN') %>%
+  mutate(
+    norm_firing_rate = raw_firing_rate - baseline,
+    norm_firing_rate = norm_firing_rate / max(abs(norm_firing_rate))
+  ) %>%
+  group_by(direction, speed) %>%
+  summarize(
+    firing_rate = mean(norm_firing_rate),
+    sem = sd(norm_firing_rate) / sqrt(n())
+  ) %>%
+  ungroup() %>%
+  mutate(direction = as_factor(direction))
+data_C
+```
+
+**Plot data:**
+```{r}
+fig_C <- data_C %>%
+  ggplot(aes(x = speed, y = firing_rate)) +
+    # Plot data and threshold
+    geom_hline(
+      yintercept = 0.8 * max(data_C$firing_rate),
+      colour = 'grey70', linetype = 'dashed'
+    ) +
+    geom_line(aes(colour = direction)) +
+    geom_errorbar(
+      aes(
+        colour = direction,
+        ymin = firing_rate - sem,
+        ymax = firing_rate + sem
+      ),
+      width = 0.02
+    ) +
+    geom_point(aes(colour = direction, shape = direction, size = direction)) +
+    # Annotate points over threshold
+    annotate(
+      geom = "segment",
+      x = 0.5, xend = 1.9,
+      y = 1.2, yend = 1.2,
+      size = 0.7,
+      arrow = arrow(ends = 'both', length = unit(2, "pt"), angle = 90)
+    ) +
+    # Select colours and shapes
+    scale_colour_manual(values = c("black", "grey50")) +
+    scale_shape_manual(values = c(15, 18)) +
+    scale_size_manual(values = c(2, 3)) +
+    # Text
+    labs(y = "Normalized\nfiring rate", x = "log(degrees/s)") +
+    #theme(axis.title.x = element_blank()) +
+    # Theme
+    theme_548 +
+    # Axes
+    geom_rangeframe(data = fudge_axis_BC) +
+    lims(y = c(-1,2)) +
+    scale_x_continuous(breaks = -1:4 / 2)
+fig_C
+```
+
+
+
+
+
+
+
+
+
