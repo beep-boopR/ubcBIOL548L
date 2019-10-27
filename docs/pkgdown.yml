@@ -2,7 +2,7 @@ pandoc: 2.7.2
 pkgdown: 1.4.1.9000
 pkgdown_sha: 90572181f1ac83b56089ab14c16f4d9e063f216b
 articles:
-  group-01: group-01.html
-  group-02: group-02.html
+  group-01_Fundamentals-data-wrangling-tidyverse: group-01_Fundamentals-data-wrangling-tidyverse.html
+  group-02_Piping-single-panel-ggplot-figs: group-02_Piping-single-panel-ggplot-figs.html
   group-03_Using-cowplot-multi-panel: group-03_Using-cowplot-multi-panel.html
 

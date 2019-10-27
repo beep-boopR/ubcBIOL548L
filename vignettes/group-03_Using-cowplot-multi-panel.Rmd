@@ -681,3 +681,36 @@ Similarly, `cowplot::draw_grob()` places grobs (GRaphical OBjects). We'll use th
 Each image's (or grob's) location is specified with x- and y- coordinates. Each runs from 0 to 1, with (0,0) being the lower left corner of the canvas.  
 
 At the moment, vectorization of the code you see below doesn't seem possible. It's a bit tedious (and un-tidy!) but it works!  
+
+
+##### Using maps with ggplot/cowplot
+
+Adding in maps can be useful to showing geographic trends. The `maps` package allows for convenient plotting of (annotated) maps with `ggplot`.
+
+**Quick example. Load the 'world' map:**
+```{r}
+w <- map_data("world")
+```
+
+**If you'd, for whatever reason, like to highlight certain countries:**
+```{r}
+fig_map <- ggplot(w) +
+  # This outlines all countries in grey70
+  geom_polygon(aes(x = long, y = lat, group = group),
+               fill = "white", colour = "grey70") +
+  # Let's highlight some countries in dogdgerblue fill
+  geom_polygon(aes(x = long, y = lat, group = group),
+               fill = "dodgerblue", colour = "black",
+               data = filter(w, region %in% c("Chad", "China", "New Zealand",
+                                              "Portugal", "Switzerland"))) +
+  coord_fixed(1.3) +
+  # Nuke the theme for simplicity.
+  theme_nothing()
+fig_map
+```
+
+**This can be added to a cowplot rather easily:**
+```{r}
+plot_grid(fig_map, 
+          #photo_panel, 
+          fig_F, ncol = 1)
