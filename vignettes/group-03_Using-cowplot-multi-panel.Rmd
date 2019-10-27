@@ -147,9 +147,9 @@ package.check <- lapply(
 
 **Bird head icons**
 ```{r}
-icon_hb <- "graphics/hummingbird.png"
-icon_zb <- "graphics/zeebie.png"
-icon_pg <- "graphics/pigeon.png"
+icon_hb <- "hummingbird.png"
+icon_zb <- "zeebie.png"
+icon_pg <- "pigeon.png"
 
 # Colours for the different birds
 col_hb <- "#ED0080"
@@ -683,6 +683,67 @@ Each image's (or grob's) location is specified with x- and y- coordinates. Each 
 At the moment, vectorization of the code you see below doesn't seem possible. It's a bit tedious (and un-tidy!) but it works!  
 
 
+
+```{r fig3_final, fig.height=11, fig.width=8.5}
+cow_final <- ggdraw() +
+  draw_plot(cow_A2F) +
+  # Hummingbird heads
+  draw_image(image = icon_hb, x = -0.445, y =  0.445, scale = 0.060) +# Panel A
+  draw_image(image = icon_hb, x = -0.350, y =  0.305, scale = 0.060) +# Panel B
+  draw_image(image = icon_hb, x =  0.445, y =  0.280, scale = 0.060) +# Panel D
+  draw_image(image = icon_hb, x = -0.280, y = -0.073, scale = 0.060) +# Panel E
+  draw_image(image = icon_hb, x = -0.280, y = -0.313, scale = 0.060) +# Panel F
+  # Zebra finch heads
+  draw_image(image = icon_zb, x = -0.360, y =  0.135, scale = 0.052) +# Panel C
+  draw_image(image = icon_zb, x =  0.435, y =  0.250, scale = 0.052) +# Panel D
+  draw_image(image = icon_zb, x = -0.290, y = -0.100, scale = 0.052) +# Panel E
+  draw_image(image = icon_zb, x = -0.290, y = -0.340, scale = 0.052) +# Panel F
+  # Pigeon head
+  draw_image(image = icon_pg, x = -0.290, y = -0.130, scale = 0.055) +# Panel E
+  # Boxes
+  draw_grob(grob = rect_hb_t, x =  0.390, y =  0.280, scale = 0.010) +
+  draw_grob(grob = rect_zb_t, x =  0.390, y =  0.253, scale = 0.010) +
+  draw_grob(grob = rect_hb,   x = -0.340, y = -0.073, scale = 0.010) +
+  draw_grob(grob = rect_zb,   x = -0.340, y = -0.099, scale = 0.010) +
+  draw_grob(grob = rect_pg,   x = -0.340, y = -0.125, scale = 0.010) +
+  draw_grob(grob = rect_hb,   x = -0.340, y = -0.313, scale = 0.010) +
+  draw_grob(grob = rect_zb,   x = -0.340, y = -0.337, scale = 0.010) +
+  # Points
+  draw_grob(grob = point_hb,  x =  0.390, y =  0.280, scale = 0.001) +
+  draw_grob(grob = point_zb,  x =  0.390, y =  0.253, scale = 0.001)
+cow_final
+```
+
+##### Saving multi-panel plots
+
+`cowplot::save_plot()` tends to work better with multi-panel figures than `ggsave()` does. You can specify size via base_height and base_width
+
+**For example:**
+`save_plot("Gaedeetal_Fig3.svg", cow_final, base_height = 11, base_width = 8.5)`
+
+##### Using photographs with ggplot/cowplot
+
+Often, you may opt to add a photograph as its own panel.
+
+**Here's a quick example:**
+```{r}
+photo <- "./photo.jpg"
+getwd()
+```
+
+**Now create a ggplot object that features only the image.**
+```{r}
+photo_panel <- ggdraw() + draw_image(photo, scale = 0.8)
+photo_panel
+```
+
+**Now cowplot it!**
+```{r}
+plot_grid(fig_F, photo_panel, ncol = 1)
+```
+
+
+
 ##### Using maps with ggplot/cowplot
 
 Adding in maps can be useful to showing geographic trends. The `maps` package allows for convenient plotting of (annotated) maps with `ggplot`.
@@ -712,5 +773,5 @@ fig_map
 **This can be added to a cowplot rather easily:**
 ```{r}
 plot_grid(fig_map, 
-          #photo_panel, 
+          photo_panel, 
           fig_F, ncol = 1)
