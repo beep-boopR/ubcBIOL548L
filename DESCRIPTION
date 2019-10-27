@@ -21,6 +21,7 @@ Description: Tutorial that walks students of different skill levels through a
   series of data wrangling and visualization exercises. The goal is to make sure 
   students are comfortable using packages within the tidyverse, along with 
   `cowplot`, to produce publication quality figures.
+URL: https://github.com/beep-boopR/ubcBIOL548L
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true

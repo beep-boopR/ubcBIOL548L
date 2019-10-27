@@ -1,6 +1,6 @@
 ---
 title: "Part 3: Using cowplot to construct multi-panel figures"
-author: "Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan"
+author: "by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan"
 date: "Last updated on `r Sys.time()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -38,41 +38,67 @@ knitr::opts_chunk$set(
               package = "ubcBIOL548L"),
             "./Fig3F_data.csv")
 # Images  
+  file.copy(system.file("extdata", "gaedeeatal_fig3.png",
+              package = "ubcBIOL548L"),
+            "./gaedeeatal_fig3.png")
   file.copy(system.file("extdata", "hummingbird.png",
               package = "ubcBIOL548L"),
             "./hummingbird.png")
-  file.copy(system.file("extdata", "hummingbird.png",
+  file.copy(system.file("extdata", "pigeon.png",
               package = "ubcBIOL548L"),
-            "./hummingbird.png")
-  file.copy(system.file("extdata", "hummingbird.png",
+            "./pigeon.png")
+  file.copy(system.file("extdata", "zeebie.png",
               package = "ubcBIOL548L"),
-            "./hummingbird.png")
+            "./zeebie.png")
+  file.copy(system.file("extdata", "photo.png",
+              package = "ubcBIOL548L"),
+            "./photo.png")
 ```
 
 ## Introduction
 
-This post is part of an R workshop created for BIOL 548L, a graduate-level 
-course on data visualization taught at the University of British Columbia.  
-All code and contents of this post were written together by Vikram B. Baliga, 
-Andrea Gaede and Shreeram Senthivasan.  
+This vignette is Part 3 of an R workshop created for 
+[BIOL 548L](http://www.biology.ubc.ca/course-listing-2/#500level-4), a 
+graduate-level course on data visualization taught through the 
+[Biology Program](http://www.biology.ubc.ca/)
+at the University of British Columbia. 
 
-There are three groups with increasing levels of difficulty. Please see 
-[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html) for 
-Group 1's vignette and 
-[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html) for 
-Group 2's vignette.
+When the workshop runs, we split students into three groups with successively
+increasing levels of difficulty. **To make sense of what follows, we recommend 
+working through (or at least looking at) 
+[Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html) 
+and 
+[Part 2's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html)
+.**
 
+All code and contents of this vignette were written together by Vikram B. 
+Baliga, Andrea Gaede and Shreeram Senthivasan.  
+
+## The endgame: create a multi-panel plot entirely via code
+
+Multi-panel plots can provide an elegant way to tell a visual story that is 
+driven by narrative. One example of this is to craft a figure that, from top to 
+bottom, shows raw data, how data are processed and analyzed, and then ultimately
+delivers a strong punchline.
+
+We will use Figure 3 from Gaede et al. 2017 (Current Biology) as an example. 
+Although the original version of this figure was made via creating individual
+plots in R and then stitching them together in Adobe Illustrator, in this 
+vignette, we will provide code that will create the **entire** figure. 
+
+![Figure 3 from Gaede et al. 2017](./gaedeeatal_fig3.png)
 
 
 ## Group 3: Make a multi-panel figure with a clear narrative arc
 
-### Learning Objectives:
+### Learning Objectives
+The specific learning objectives for this post are:
 1. Plan a sequence of plots that support a declarative statement of a result
 2. Construct a multi-panel figure using cowplot
 3. Evaluate which among a diversity of plotting options most effectively 
    communicates a logical argument
 
-### Lesson: 
+## Lesson 
 
 ```{r package_loading, message=FALSE, warning=FALSE}
 #library(ubcBIOL548L)
