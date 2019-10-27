@@ -1,1 +1,23 @@
+url: https://beep-boopr.github.io/ubcBIOL548L/
+
 destination: docs
+
+authors:
+  Vikram B. Baliga:
+    href: https://www.vikram-baliga.com/
+  Andrea Gaede:
+    href: https://www.andreagaede.com/
+  Shree Senthivasan:
+    href: https://www.zoology.ubc.ca/person/shreeram-senthivasan/
+
+navbar:
+  components:
+    articles:
+      text: Vignettes
+      menu:
+      - text: 'Part 1: Fundamentals of data wrangling in tidyverse'
+        href: articles/group-01_Fundamentals-data-wrangling-tidyverse.html
+      - text: 'Part 2: Piping and producing single-panel ggplot figures'
+        href: articles/group-02_Piping-single-panel-ggplot-figs.html
+      - text: 'Part 3: Using cowplot to construct multi-panel figures'
+        href: articles/group-03_Using-cowplot-multi-panel.html

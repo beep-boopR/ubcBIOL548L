@@ -5,4 +5,7 @@ articles:
   group-01_Fundamentals-data-wrangling-tidyverse: group-01_Fundamentals-data-wrangling-tidyverse.html
   group-02_Piping-single-panel-ggplot-figs: group-02_Piping-single-panel-ggplot-figs.html
   group-03_Using-cowplot-multi-panel: group-03_Using-cowplot-multi-panel.html
+urls:
+  reference: https://beep-boopr.github.io/ubcBIOL548L//reference
+  article: https://beep-boopr.github.io/ubcBIOL548L//articles
 
