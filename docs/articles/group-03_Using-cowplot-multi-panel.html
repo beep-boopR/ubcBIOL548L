@@ -60,12 +60,19 @@
       <a href="../articles/group-02.html">Part 2: Piping and producing single-panel ggplot figures</a>
     </li>
     <li>
-      <a href="../articles/group-03.html">Part 3: Using cowplot to construct multi-panel figures</a>
+      <a href="../articles/group-03_Using-cowplot-multi-panel.html">Part 3: Using cowplot to construct multi-panel figures</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/beep-boopR/ubcBIOL548L">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -79,12 +86,12 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Part 3: Using cowplot to construct multi-panel figures</h1>
-                        <h4 class="author">Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
+                        <h4 class="author">by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
             
-            <h4 class="date">Last updated on 2019-10-27 13:24:06</h4>
+            <h4 class="date">Last updated on 2019-10-27 14:36:01</h4>
       
-      
-      <div class="hidden name"><code>group-03.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/beep-boopR/ubcBIOL548L/blob/master/vignettes/group-03_Using-cowplot-multi-panel.Rmd"><code>vignettes/group-03_Using-cowplot-multi-panel.Rmd</code></a></small>
+      <div class="hidden name"><code>group-03_Using-cowplot-multi-panel.Rmd</code></div>
 
     </div>
 
@@ -93,25 +100,32 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>This post is part of an R workshop created for BIOL 548L, a graduate-level course on data visualization taught at the University of British Columbia.<br>
-All code and contents of this post were written together by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan.</p>
-<p>There are three groups with increasing levels of difficulty. Please see <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html">here</a> for Group 1’s vignette and <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html">here</a> for Group 2’s vignette.</p>
+<p>This vignette is Part 3 of an R workshop created for <a href="http://www.biology.ubc.ca/course-listing-2/#500level-4">BIOL 548L</a>, a graduate-level course on data visualization taught through the <a href="http://www.biology.ubc.ca/">Biology Program</a> at the University of British Columbia.</p>
+<p>When the workshop runs, we split students into three groups with successively increasing levels of difficulty. <strong>To make sense of what follows, we recommend working through (or at least looking at) <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html">Part 1’s vignette</a> and <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html">Part 2’s vignette</a> .</strong></p>
+<p>All code and contents of this vignette were written together by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan.</p>
+</div>
+<div id="the-endgame-create-a-multi-panel-plot-entirely-via-code" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-endgame-create-a-multi-panel-plot-entirely-via-code" class="anchor"></a>The endgame: create a multi-panel plot entirely via code</h2>
+<p>Multi-panel plots can provide an elegant way to tell a visual story that is driven by narrative. One example of this is to craft a figure that (from top to bottom) first shows raw data, then how data are processed and analyzed, and then ultimately delivers a strong punchline.</p>
+<p>We will use Figure 3 from Gaede et al. 2017 (Current Biology) as an example. Although the original version of this figure was made via creating individual plots in R and then stitching them together in Adobe Illustrator, in this vignette we’ll provide code that will create the <strong>entire</strong> figure.</p>
+<p>Here’s the original figure, as seen in the paper:</p>
+<div class="figure">
+<img src="gaedeeatal_fig3.png" alt="Figure 3 from Gaede et al. 2017"><p class="caption">Figure 3 from Gaede et al. 2017</p>
+</div>
 </div>
 <div id="group-3-make-a-multi-panel-figure-with-a-clear-narrative-arc" class="section level2">
 <h2 class="hasAnchor">
 <a href="#group-3-make-a-multi-panel-figure-with-a-clear-narrative-arc" class="anchor"></a>Group 3: Make a multi-panel figure with a clear narrative arc</h2>
 <div id="learning-objectives" class="section level3">
 <h3 class="hasAnchor">
-<a href="#learning-objectives" class="anchor"></a>Learning Objectives:</h3>
-<ol style="list-style-type: decimal">
-<li>Plan a sequence of plots that support a declarative statement of a result</li>
-<li>Construct a multi-panel figure using cowplot</li>
-<li>Evaluate which among a diversity of plotting options most effectively communicates a logical argument</li>
-</ol>
+<a href="#learning-objectives" class="anchor"></a>Learning Objectives</h3>
+<p>The specific learning objectives for this post are: 1. Plan a sequence of plots that support a declarative statement of a result 2. Construct a multi-panel figure using cowplot 3. Evaluate which among a diversity of plotting options most effectively communicates a logical argument</p>
 </div>
-<div id="lesson" class="section level3">
-<h3 class="hasAnchor">
-<a href="#lesson" class="anchor"></a>Lesson:</h3>
+</div>
+<div id="lesson" class="section level2">
+<h2 class="hasAnchor">
+<a href="#lesson" class="anchor"></a>Lesson</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">#library(ubcBIOL548L)</span></a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="co">## Loading packages and data</span></a>
@@ -263,8 +277,7 @@ All code and contents of this post were written together by Vikram B. Baliga, An
 <a class="sourceLine" id="cb3-59" title="59"><span class="co">#&gt;   spike = col_double()</span></a>
 <a class="sourceLine" id="cb3-60" title="60"><span class="co">#&gt; )</span></a>
 <a class="sourceLine" id="cb3-61" title="61">fig_A</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-</div>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="create-and-save-panels-as-separate-ggplot-objects" class="section level3">
 <h3 class="hasAnchor">
@@ -272,27 +285,27 @@ All code and contents of this post were written together by Vikram B. Baliga, An
 <div id="figure-3-panel-b" class="section level4">
 <h4 class="hasAnchor">
 <a href="#figure-3-panel-b" class="anchor"></a>Figure 3 Panel B:</h4>
-<p><img src="group-03_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div id="figure-3-panel-c" class="section level4">
 <h4 class="hasAnchor">
 <a href="#figure-3-panel-c" class="anchor"></a>Figure 3 Panel C:</h4>
-<p><img src="group-03_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 </div>
 <div id="figure-3-panel-d" class="section level4">
 <h4 class="hasAnchor">
 <a href="#figure-3-panel-d" class="anchor"></a>Figure 3 Panel D:</h4>
-<p><img src="group-03_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 <div id="figure-3-panel-e" class="section level4">
 <h4 class="hasAnchor">
 <a href="#figure-3-panel-e" class="anchor"></a>Figure 3 Panel E:</h4>
-<p><img src="group-03_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 </div>
 <div id="figure-3-panel-f" class="section level4">
 <h4 class="hasAnchor">
 <a href="#figure-3-panel-f" class="anchor"></a>Figure 3 Panel F:</h4>
-<p><img src="group-03_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="intro-to-cowplot" class="section level4">
 <h4 class="hasAnchor">
@@ -307,33 +320,33 @@ All code and contents of this post were written together by Vikram B. Baliga, An
 </ul>
 <p><strong>Plot objects can be added sequentially</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C)</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p><strong>By default, additional panels are initially added within the same row.</strong><br><code>plot_grid()</code> then tends to prefer to have ncol = nrow as best as possible:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C, fig_E,</a>
 <a class="sourceLine" id="cb5-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>))</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C, fig_E, fig_F,</a>
 <a class="sourceLine" id="cb6-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>))</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-11-2.png" width="700"></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C, fig_E, fig_F, fig_B,</a>
 <a class="sourceLine" id="cb7-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5"</span>))</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-11-3.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-11-3.png" width="700"></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C, fig_E, fig_F, fig_B, fig_C,</a>
 <a class="sourceLine" id="cb8-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5"</span>,<span class="st">"6"</span>))</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-11-4.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-11-4.png" width="700"></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C, fig_E, fig_F, fig_B, fig_C, fig_E,</a>
 <a class="sourceLine" id="cb9-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5"</span>,<span class="st">"6"</span>,<span class="st">"7"</span>))</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-11-5.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-11-5.png" width="700"></p>
 <p><strong>This looks okay, but we may prefer to have the plots arranged in one column.</strong><br>
 Let’s first just focus on panels E and F.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
 <a class="sourceLine" id="cb10-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p><strong>Cowplot also allows you to add labels to panels as you’d see in a journal article.</strong></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
 <a class="sourceLine" id="cb11-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
 <a class="sourceLine" id="cb11-3" title="3">          <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>))</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 <p><strong>See the arguments of <code><a href="https://rdrr.io/pkg/cowplot/man/plot_grid.html">cowplot::plot_grid()</a></code> to see how labels can be adjusted.</strong><br>
 We’ll adjust the size and (temporarily) change to a serif font.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
@@ -341,7 +354,7 @@ We’ll adjust the size and (temporarily) change to a serif font.</p>
 <a class="sourceLine" id="cb12-3" title="3">          <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>),</a>
 <a class="sourceLine" id="cb12-4" title="4">          <span class="dt">label_size =</span> <span class="dv">40</span>,</a>
 <a class="sourceLine" id="cb12-5" title="5">          <span class="dt">label_fontfamily =</span> <span class="st">"serif"</span>)</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 </div>
 <div id="re-create-gaede-et-al--2017-fig-3" class="section level4">
 <h4 class="hasAnchor">
@@ -358,7 +371,7 @@ We’ll adjust the size and (temporarily) change to a serif font.</p>
 <a class="sourceLine" id="cb13-4" title="4">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
 <a class="sourceLine" id="cb13-5" title="5">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
 <a class="sourceLine" id="cb13-6" title="6">cow_EF</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p><strong>For panel A, we’ll adjust the padding around the margin.</strong><br>
 Within the argument <code>plot.margin</code>, the order is top, right, bottom, left; think TRouBLe (T,R,B,L)</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">fig_A &lt;-<span class="st"> </span>fig_A <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">unit</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5.5</span>, <span class="fl">5.5</span>, <span class="dv">0</span>, <span class="fl">5.5</span>), <span class="dt">units =</span> <span class="st">"pt"</span>))</a>
@@ -369,7 +382,7 @@ Within the argument <code>plot.margin</code>, the order is top, right, bottom, l
 <a class="sourceLine" id="cb14-6" title="6">                   <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
 <a class="sourceLine" id="cb14-7" title="7">                   <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
 <a class="sourceLine" id="cb14-8" title="8">cow_A</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p><strong>Panels B and C</strong><br>
 When combining B and C, we should note that C has an x-axis label but B does not. Therefore, we will add blank plots (NULL) as padding and then adjust the relative heights to fit things comfortably. We still need to supply 4 labels, so "" will be used for blank plots.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">cow_BC &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_B, <span class="ot">NULL</span>, fig_C,</a>
@@ -381,7 +394,7 @@ When combining B and C, we should note that C has an x-axis label but B does not
 <a class="sourceLine" id="cb15-7" title="7">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
 <a class="sourceLine" id="cb15-8" title="8">cow_BC</a>
 <a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p><strong>Panel D</strong><br>
 Similarly, with panel D, we’ll add a NULL object to the cowplot and adjust the relative heights to the proportions we’d like.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">fig_D &lt;-<span class="st"> </span>fig_D <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">"Number of speed bins above threshold    "</span>)</a>
@@ -396,7 +409,7 @@ Similarly, with panel D, we’ll add a NULL object to the cowplot and adjust the
 <a class="sourceLine" id="cb16-10" title="10"><span class="co">#&gt; Warning: Removed 770 rows containing missing values (geom_point).</span></a>
 <a class="sourceLine" id="cb16-11" title="11">cow_D</a>
 <a class="sourceLine" id="cb16-12" title="12"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p><strong>You can cowplot multiple cowplots</strong></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">cow_BCD &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_BC, cow_D,</a>
 <a class="sourceLine" id="cb17-2" title="2">                     <span class="dt">rel_widths =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>),</a>
@@ -405,7 +418,7 @@ Similarly, with panel D, we’ll add a NULL object to the cowplot and adjust the
 <a class="sourceLine" id="cb17-5" title="5"></a>
 <a class="sourceLine" id="cb17-6" title="6"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a>
 <a class="sourceLine" id="cb17-7" title="7">cow_BCD</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 </div>
 <div id="now-combine-all-the-panels-together" class="section level5">
 <h5 class="hasAnchor">
@@ -420,7 +433,7 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <a class="sourceLine" id="cb18-5" title="5">          <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
 <a class="sourceLine" id="cb18-6" title="6">          <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
 <a class="sourceLine" id="cb18-7" title="7">cow_A2F</a></code></pre></div>
-<p><img src="group-03_files/figure-html/unnamed-chunk-20-1.png" width="816"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/unnamed-chunk-20-1.png" width="816"></p>
 </div>
 <div id="adding-icons-to-a-multipanel-plot" class="section level5">
 <h5 class="hasAnchor">
@@ -442,7 +455,9 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
+      <li><a href="#the-endgame-create-a-multi-panel-plot-entirely-via-code">The endgame: create a multi-panel plot entirely via code</a></li>
       <li><a href="#group-3-make-a-multi-panel-figure-with-a-clear-narrative-arc">Group 3: Make a multi-panel figure with a clear narrative arc</a></li>
+      <li><a href="#lesson">Lesson</a></li>
       </ul>
 </div>
       </div>

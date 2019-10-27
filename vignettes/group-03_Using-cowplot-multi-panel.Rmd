@@ -77,14 +77,16 @@ Baliga, Andrea Gaede and Shreeram Senthivasan.
 ## The endgame: create a multi-panel plot entirely via code
 
 Multi-panel plots can provide an elegant way to tell a visual story that is 
-driven by narrative. One example of this is to craft a figure that, from top to 
-bottom, shows raw data, how data are processed and analyzed, and then ultimately
-delivers a strong punchline.
+driven by narrative. One example of this is to craft a figure that (from top to 
+bottom) first shows raw data, then how data are processed and analyzed, and then
+ultimately delivers a strong punchline.
 
 We will use Figure 3 from Gaede et al. 2017 (Current Biology) as an example. 
 Although the original version of this figure was made via creating individual
 plots in R and then stitching them together in Adobe Illustrator, in this 
-vignette, we will provide code that will create the **entire** figure. 
+vignette we'll provide code that will create the **entire** figure. 
+
+Here's the original figure, as seen in the paper:
 
 ![Figure 3 from Gaede et al. 2017](./gaedeeatal_fig3.png)
 
