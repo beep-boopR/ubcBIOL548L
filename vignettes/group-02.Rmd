@@ -1,5 +1,5 @@
 ---
-title: "BIOL548L R workshop - group 2"
+title: "Part 2: Piping and producing single-panel ggplot figures"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{group-02}

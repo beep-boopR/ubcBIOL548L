@@ -1,5 +1,5 @@
 ---
-title: "BIOL548L R workshop - group 1"
+title: "Part 1: Fundamentals of data import, structuring, and plotting in tidyverse"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{group-01}

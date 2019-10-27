@@ -1,5 +1,7 @@
 ---
 title: "Part 3: Using cowplot to construct multi-panel figures"
+author: "Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan"
+date: "Last updated on `r Sys.time()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{group-03}
@@ -14,31 +16,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-knitr::opts_chunk$set(warning = FALSE, message = FALSE)
-#library(ubcBIOL548L)
-
-library(gapminder)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(tibble)
-library(readr)
-library(forcats)
-library(readxl)
-
-library(ggthemes)
-library(magick)
-library(grid)
-library(cowplot)
-
-library(ggmap)
-library(maps)
-```
-
-
 ```{r, include = FALSE}
 
+# Gaede et al. 2017 data. (Can likely be parallelized, but we can do that later)
   file.copy(system.file("extdata", "Fig3A_data.csv",
               package = "ubcBIOL548L"),
             "./Fig3A_data.csv")
@@ -57,16 +37,32 @@ library(maps)
   file.copy(system.file("extdata", "Fig3F_data.csv",
               package = "ubcBIOL548L"),
             "./Fig3F_data.csv")
+# Images  
+  file.copy(system.file("extdata", "hummingbird.png",
+              package = "ubcBIOL548L"),
+            "./hummingbird.png")
+  file.copy(system.file("extdata", "hummingbird.png",
+              package = "ubcBIOL548L"),
+            "./hummingbird.png")
+  file.copy(system.file("extdata", "hummingbird.png",
+              package = "ubcBIOL548L"),
+            "./hummingbird.png")
 ```
 
 ## Introduction
 
-This is an R workshop created for a graduate data visualization course at the 
-University of British Columbia by Vikram Baliga, Andrea Gaede and 
-Shreeram Senthivasan.  
+This post is part of an R workshop created for BIOL 548L, a graduate-level 
+course on data visualization taught at the University of British Columbia.  
+All code and contents of this post were written together by Vikram B. Baliga, 
+Andrea Gaede and Shreeram Senthivasan.  
 
-There are three groups with increasing levels of difficulty. Each group has a 
-set of learning opjectives.
+There are three groups with increasing levels of difficulty. Please see 
+[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html) for 
+Group 1's vignette and 
+[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html) for 
+Group 2's vignette.
+
+
 
 ## Group 3: Make a multi-panel figure with a clear narrative arc
 
@@ -76,7 +72,49 @@ set of learning opjectives.
 3. Evaluate which among a diversity of plotting options most effectively 
    communicates a logical argument
 
-### Lesson:  
+### Lesson: 
+
+```{r package_loading, message=FALSE, warning=FALSE}
+#library(ubcBIOL548L)
+
+## Loading packages and data
+## If a package is installed, it will be loaded. If any are not, the missing
+## package(s) will be installed from CRAN and then loaded.
+## Modified from: 
+## https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/
+
+
+## First specify the packages of interest
+packages <-
+  c("gapminder",
+    "ggplot2",
+    "tidyr",
+    "dplyr",
+    "tibble",
+    "readr",
+    "forcats",
+    "readxl",
+    "ggthemes",
+    "magick",
+    "grid",
+    "cowplot",
+    "ggmap",
+    "maps")
+## Now load or install&load all
+package.check <- lapply(
+  packages,
+  FUN = function(x) {
+    if (!require(x, character.only = TRUE)) {
+      install.packages(x, dependencies = TRUE,
+                       repos = "http://cran.us.r-project.org")
+      library(x, character.only = TRUE)
+    }
+  }
+)
+```
+
+
+
 #### Prep work for figure legends:
 
 **Bird head icons**
