@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(ubcBIOL548L)
+#library(ubcBIOL548L)
 
 library(gapminder)
 library(ggplot2)
@@ -36,7 +36,34 @@ library(maps)
 
 ```
 
+```{r, include = FALSE}
 
+  file.copy(system.file("extdata", "gapminder.csv",
+              package = "ubcBIOL548L"),
+            "./gapminder.csv")
+  file.copy(system.file("extdata", "gapminder.xlsx",
+                        package = "ubcBIOL548L"),
+            "./gapminder.xlsx")
+  file.copy(system.file("extdata", "Fig3A_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3A_data.csv")
+  file.copy(system.file("extdata", "Fig3B_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3B_data.csv")
+  file.copy(system.file("extdata", "Fig3C_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3C_data.csv")
+  file.copy(system.file("extdata", "Fig3D_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3D_data.csv")
+  file.copy(system.file("extdata", "Fig3E_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3E_data.csv")
+  file.copy(system.file("extdata", "Fig3F_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3F_data.csv")
+
+```
 ## Introduction
 
 This is an R workshop created for a graduate data visualization course at the University of British Columbia by Vikram Baliga, Andrea Gaede and Shreeram Senthivasan.  
@@ -181,7 +208,7 @@ col_pg <- "#4AA4F2"
 
 #### Fig 3 Panel D: 
 ```{r}
-data_D <- read_csv("gaedeetal_data/Fig3D_data.csv")
+data_D <- read_csv("Fig3D_data.csv")
 
 # Visualize data
 data_D
@@ -247,7 +274,7 @@ data_D %>%
 
 **Fix x axis:**
 ```{r, warning=FALSE}
-data_D <- read_csv("gaedeetal_data/Fig3D_data.csv") %>%
+data_D <- read_csv("Fig3D_data.csv") %>%
   mutate(
     perc_firing = perc_firing * 100,
     perc_firing = as_factor(perc_firing)
@@ -408,17 +435,17 @@ fig_D
 #### Fig 3 Panel E:
 **Visualize the data:**
 ```{r}
-read_csv("./gaedeetal_data/Fig3E_data.csv")
+read_csv("./Fig3E_data.csv")
 ```
 
 **Restructure data for plotting:**
 ```{r, warning=FALSE}
 # Add the missing info
-read_csv("./gaedeetal_data/Fig3E_data.csv") %>%
+read_csv("./Fig3E_data.csv") %>%
   mutate(species = c("hb", "zb", "pg"))
 
 # Pull the y-values down from the header
-data_E <- read_csv("./gaedeetal_data/Fig3E_data.csv") %>%
+data_E <- read_csv("./Fig3E_data.csv") %>%
   mutate(species = c("hb", "zb", "pg")) %>%
   gather(key = speed, value = prop, -species)
 data_E
@@ -513,25 +540,25 @@ fig_E
 #### Fig 3 Panel B:
 **Visualize data:**
 ```{r}
-read_csv("gaedeetal_data/Fig3B_data.csv")
+read_csv("Fig3B_data.csv")
 ```
 
 **Gather all the bin data into one column:**
 ```{r}
-read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+read_csv("Fig3B_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin"))
 ```
 
 **Group the data by trial, direction speed:**
 ```{r}
-read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+read_csv("Fig3B_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed)
 ```
 
 **Calculate firing rate for each trial:**
 ```{r, warning=FALSE}
-read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+read_csv("Fig3B_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
   summarize(
@@ -541,7 +568,7 @@ read_csv("gaedeetal_data/Fig3B_data.csv") %>%
 
 **Finally let's ungroup and store this unnormalized data:**
 ```{r}
-data_B_raw <- read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+data_B_raw <- read_csv("Fig3B_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
   summarize(
@@ -823,26 +850,26 @@ fig_B
 #### Fig 3 Panel F:
 **Visualize data:**
 ```{r}
-read_csv("./gaedeetal_data/Fig3F_data.csv")
+read_csv("./Fig3F_data.csv")
 speeds_F <- c(0.24,0.5,1,2,4,8,16,24,32,48,64,80)
 ```
 
 **Remove any rows without data (dir1.area is NA):**
 ```{r}
-read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))
 ```
 
 **Remove unnecessary columns:**
 ```{r}
-read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
   select(starts_with("sp"))
 ```
 
 **Rename columns using speeds_F, change species to words:**
 ```{r}
-read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
   select(starts_with("sp")) %>%
   rename_all(~c("species",as.character(speeds_F))) %>%
@@ -856,7 +883,7 @@ read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
 
 **Reshape data for plotting:**
 ```{r}
-read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
   select(starts_with("sp")) %>%
   rename_all(~c("species",as.character(speeds_F))) %>%
@@ -871,7 +898,7 @@ read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
 
 **Summarize proporions by species and speed:**
 ```{r}
-read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
   select(starts_with("sp")) %>%
   rename_all(~c("species",as.character(speeds_F))) %>%
@@ -889,7 +916,7 @@ read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
 
 **Finally fix the factor levels as before:**
 ```{r}
-data_F <- read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+data_F <- read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
   select(starts_with("sp")) %>%
   rename_all(~c("species",as.character(speeds_F))) %>%
@@ -942,7 +969,7 @@ fig_F
 #### Fig 3 Panel C:
 **Reorganize raw data:**
 ```{r}
-data_C_raw <- read_csv("gaedeetal_data/Fig3C_data.csv") %>%
+data_C_raw <- read_csv("Fig3C_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
   summarize(

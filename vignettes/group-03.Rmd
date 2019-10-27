@@ -1,5 +1,5 @@
 ---
-title: "BIOL548L R workshop - group 3"
+title: "Part 3: Using cowplot to construct multi-panel figures"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{group-03}
@@ -15,7 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(ubcBIOL548L)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+#library(ubcBIOL548L)
 
 library(gapminder)
 library(ggplot2)
@@ -36,18 +37,44 @@ library(maps)
 ```
 
 
+```{r, include = FALSE}
+
+  file.copy(system.file("extdata", "Fig3A_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3A_data.csv")
+  file.copy(system.file("extdata", "Fig3B_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3B_data.csv")
+  file.copy(system.file("extdata", "Fig3C_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3C_data.csv")
+  file.copy(system.file("extdata", "Fig3D_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3D_data.csv")
+  file.copy(system.file("extdata", "Fig3E_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3E_data.csv")
+  file.copy(system.file("extdata", "Fig3F_data.csv",
+              package = "ubcBIOL548L"),
+            "./Fig3F_data.csv")
+```
+
 ## Introduction
 
-This is an R workshop created for a graduate data visualization course at the University of British Columbia by Vikram Baliga, Andrea Gaede and Shreeram Senthivasan.  
+This is an R workshop created for a graduate data visualization course at the 
+University of British Columbia by Vikram Baliga, Andrea Gaede and 
+Shreeram Senthivasan.  
 
-There are three groups with increasing levels of difficulty. Each group has a set of learning opjectives.
+There are three groups with increasing levels of difficulty. Each group has a 
+set of learning opjectives.
 
 ## Group 3: Make a multi-panel figure with a clear narrative arc
 
 ### Learning Objectives:
 1. Plan a sequence of plots that support a declarative statement of a result
 2. Construct a multi-panel figure using cowplot
-3. Evaluate which among a diversity of plotting options most effectively communicates a logical argument
+3. Evaluate which among a diversity of plotting options most effectively 
+   communicates a logical argument
 
 ### Lesson:  
 #### Prep work for figure legends:
@@ -108,7 +135,7 @@ This figure shows that in hummingbirds, these neurons respond to faster visual m
 ```{r}
 # First, import data
 fig_A <-
-  read_csv("./gaedeetal_data/Fig3A_data.csv") %>%
+  read_csv("./Fig3A_data.csv") %>%
   # Now take every nth data point (produces plot faster)
   filter(row_number() %% 5 == 0) %>%
   # Clean outliers
@@ -188,7 +215,7 @@ theme_548 <- theme_classic() +
 
 fudge_axis_BC <- tibble(speed = c(-0.5,2), firing_rate = c(-1,2))
 
-data_B_raw <- read_csv("gaedeetal_data/Fig3B_data.csv") %>%
+data_B_raw <- read_csv("Fig3B_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
   summarize(
@@ -259,7 +286,7 @@ fig_B
 #### Figure 3 Panel C:
 
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
-data_C_raw <- read_csv("gaedeetal_data/Fig3C_data.csv") %>%
+data_C_raw <- read_csv("Fig3C_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
   summarize(
@@ -330,7 +357,7 @@ fig_C
 #### Figure 3 Panel D:
 
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
-data_D <- read_csv("gaedeetal_data/Fig3D_data.csv") %>%
+data_D <- read_csv("Fig3D_data.csv") %>%
   mutate(
     perc_firing = perc_firing * 100,
     perc_firing = as_factor(perc_firing)
@@ -357,7 +384,7 @@ fig_D
 
 #### Figure 3 Panel E:
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
-data_E <- read_csv("./gaedeetal_data/Fig3E_data.csv") %>%
+data_E <- read_csv("./Fig3E_data.csv") %>%
   mutate(species = c("hb", "zb", "pg")) %>%
   gather(key = speed, value = prop, -species)
 
@@ -397,7 +424,7 @@ fig_E
 #### Figure 3 Panel F:
 ```{r, echo=FALSE, warning=FALSE,message=FALSE}
 speeds_F <- c(0.24,0.5,1,2,4,8,16,24,32,48,64,80)
-data_F <- read_csv("./gaedeetal_data/Fig3F_data.csv") %>%
+data_F <- read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
   select(starts_with("sp")) %>%
   rename_all(~c("species",as.character(speeds_F))) %>%
@@ -569,7 +596,7 @@ try(`dev.off(), silent = T`)
 `dev.new(width = 8, height = 11, units = "in")`
 
 **Now for the plot itself:**  
-```{r}
+```{r fig.height=11, fig.width=8.5}
 cow_A2F <- plot_grid(cow_A, NULL, cow_BCD, cow_EF,
           ncol = 1,
           # A negative rel_height shrinks space between elements
@@ -588,93 +615,3 @@ Similarly, `cowplot::draw_grob()` places grobs (GRaphical OBjects). We'll use th
 Each image's (or grob's) location is specified with x- and y- coordinates. Each runs from 0 to 1, with (0,0) being the lower left corner of the canvas.  
 
 At the moment, vectorization of the code you see below doesn't seem possible. It's a bit tedious (and un-tidy!) but it works!  
-
-```{r}
-cow_final <- ggdraw() +
-  draw_plot(cow_A2F) +
-  # Hummingbird heads
-  draw_image(image = icon_hb, x = -0.445, y =  0.445, scale = 0.060) +# Panel A
-  draw_image(image = icon_hb, x = -0.350, y =  0.305, scale = 0.060) +# Panel B
-  draw_image(image = icon_hb, x =  0.445, y =  0.280, scale = 0.060) +# Panel D
-  draw_image(image = icon_hb, x = -0.280, y = -0.073, scale = 0.060) +# Panel E
-  draw_image(image = icon_hb, x = -0.280, y = -0.313, scale = 0.060) +# Panel F
-  # Zebra finch heads
-  draw_image(image = icon_zb, x = -0.360, y =  0.135, scale = 0.052) +# Panel C
-  draw_image(image = icon_zb, x =  0.435, y =  0.250, scale = 0.052) +# Panel D
-  draw_image(image = icon_zb, x = -0.290, y = -0.100, scale = 0.052) +# Panel E
-  draw_image(image = icon_zb, x = -0.290, y = -0.340, scale = 0.052) +# Panel F
-  # Pigeon head
-  draw_image(image = icon_pg, x = -0.290, y = -0.130, scale = 0.055) +# Panel E
-  # Boxes
-  draw_grob(grob = rect_hb_t, x =  0.390, y =  0.280, scale = 0.010) +
-  draw_grob(grob = rect_zb_t, x =  0.390, y =  0.253, scale = 0.010) +
-  draw_grob(grob = rect_hb,   x = -0.340, y = -0.073, scale = 0.010) +
-  draw_grob(grob = rect_zb,   x = -0.340, y = -0.099, scale = 0.010) +
-  draw_grob(grob = rect_pg,   x = -0.340, y = -0.125, scale = 0.010) +
-  draw_grob(grob = rect_hb,   x = -0.340, y = -0.313, scale = 0.010) +
-  draw_grob(grob = rect_zb,   x = -0.340, y = -0.337, scale = 0.010) +
-  # Points
-  draw_grob(grob = point_hb,  x =  0.390, y =  0.280, scale = 0.001) +
-  draw_grob(grob = point_zb,  x =  0.390, y =  0.253, scale = 0.001)
-cow_final
-```
-
-##### Saving multi-panel plots
-
-`cowplot::save_plot()` tends to work better with multi-panel figures than `ggsave()` does. You can specify size via base_height and base_width
-
-**For example:**
-`save_plot("Gaedeetal_Fig3.svg", cow_final, base_height = 11, base_width = 8.5)`
-
-##### Using photographs with ggplot/cowplot
-
-Often, you may opt to add a photograph as its own panel.
-
-**Here's a quick example:**  
-```{r}
-photo <- "./graphics/photo.jpg"
-```
-
-**Now create a ggplot object that features only the image.**
-```{r}
-photo_panel <- ggdraw() + draw_image(photo, scale = 0.8)
-photo_panel
-```
-
-**Now cowplot it!**
-```{r}
-plot_grid(fig_F, photo_panel, ncol = 1)
-```
-
-##### Using maps with ggplot/cowplot
-
-Adding in maps can be useful to showing geographic trends. The `maps` package allows for convenient plotting of (annotated) maps with `ggplot`.
-
-**Quick example. Load the 'world' map:**
-```{r}
-w <- map_data("world")
-```
-
-**If you'd, for whatever reason, like to highlight certain countries:**
-```{r}
-fig_map <- ggplot(w) +
-  # This outlines all countries in grey70
-  geom_polygon(aes(x = long, y = lat, group = group),
-               fill = "white", colour = "grey70") +
-  # Let's highlight some countries in dogdgerblue fill
-  geom_polygon(aes(x = long, y = lat, group = group),
-               fill = "dodgerblue", colour = "black",
-               data = filter(w, region %in% c("Chad", "China", "New Zealand",
-                                              "Portugal", "Switzerland"))) +
-  coord_fixed(1.3) +
-  # Nuke the theme for simplicity.
-  theme_nothing()
-fig_map
-```
-
-**This can be added to a cowplot rather easily:**
-```{r}
-plot_grid(fig_map, photo_panel, fig_F, ncol = 1)
-```
-
-

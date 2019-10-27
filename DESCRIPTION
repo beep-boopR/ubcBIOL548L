@@ -1,5 +1,5 @@
 Package: ubcBIOL548L
-Title: UBC Graduate Course for Data Visualization
+Title: Data Visualization in R for UBC Graduate Course BIO548L
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Andrea",
@@ -20,7 +20,7 @@ Authors@R:
 Description: Tutorial that walks students of different skill levels through a 
   series of data wrangling and visualization exercises. The goal is to make sure 
   students are comfortable using packages within the tidyverse, along with 
-  cowplot, to produce publication quality figures.
+  `cowplot`, to produce publication quality figures.
 License: file LICENSE
 Encoding: UTF-8
 LazyData: true
