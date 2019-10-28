@@ -9,14 +9,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r knit_options, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r, include = FALSE}
+```{r file_copying, include = FALSE}
 
 # Gaede et al. 2017 data. (Can likely be parallelized, but we can do that later)
   file.copy(system.file("extdata", "Fig3A_data.csv",
@@ -84,33 +84,45 @@ ultimately delivers a strong punchline.
 We will use Figure 3 from Gaede et al. 2017 (Current Biology) as an example. 
 Although the original version of this figure was made via creating individual
 plots in R and then stitching them together in Adobe Illustrator, in this 
-vignette we'll provide code that will create the **entire** figure. 
+vignette **we'll provide code that will create the entire figure.** 
 
 Here's the original figure, as seen in the paper:
 
 ![Figure 3 from Gaede et al. 2017](./gaedeeatal_fig3.png)
 
+This study examined how neurons in the lentiformis mesencephali (LM) brain 
+region of three species of birds respond to visual motion across the retina.  
 
-## Group 3: Make a multi-panel figure with a clear narrative arc
+This figure shows that in hummingbirds, these neurons respond to faster visual 
+motion speeds than those in zebra finches or pigeons.
 
-### Learning Objectives
+## Objectives
+
 The specific learning objectives for this post are:
+
 1. Plan a sequence of plots that support a declarative statement of a result
-2. Construct a multi-panel figure using cowplot
+2. Construct a multi-panel figure using 
+   [`cowplot`](https://github.com/wilkelab/cowplot)
 3. Evaluate which among a diversity of plotting options most effectively 
    communicates a logical argument
 
-## Lesson 
+## Package loading and setup 
+
+### Load or install&load packages
+
+We'll first load packages that will be necessary. The `package.check()` function
+below is designed to first see if each package is already installed. If any 
+aren't, the function then installs them from CRAN. Then all the packages are 
+loaded.
+
+The code block is modified from 
+[this blog post](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/) 
 
 ```{r package_loading, message=FALSE, warning=FALSE}
 #library(ubcBIOL548L)
 
-## Loading packages and data
-## If a package is installed, it will be loaded. If any are not, the missing
-## package(s) will be installed from CRAN and then loaded.
 ## Modified from: 
 ## https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/
-
 
 ## First specify the packages of interest
 packages <-
@@ -128,11 +140,13 @@ packages <-
     "cowplot",
     "ggmap",
     "maps")
-## Now load or install&load all
+## Now load or install&load all packages
 package.check <- lapply(
   packages,
-  FUN = function(x) {
-    if (!require(x, character.only = TRUE)) {
+  FUN = function(x)
+  {
+    if (!require(x, character.only = TRUE))
+    {
       install.packages(x, dependencies = TRUE,
                        repos = "http://cran.us.r-project.org")
       library(x, character.only = TRUE)
@@ -146,7 +160,7 @@ package.check <- lapply(
 #### Prep work for figure legends:
 
 **Bird head icons**
-```{r}
+```{r import_grobs}
 icon_hb <- "hummingbird.png"
 icon_zb <- "zeebie.png"
 icon_pg <- "pigeon.png"
@@ -186,19 +200,13 @@ point_zb  <- pointsGrob(
              )
 ```
 
-#### Multi-panel figures can be driven by narrative
-one example: raw data -> processing -> analyses -> punchline  
 
-We will used Figure 3 from [Gaede et al. 2017 paper](https://www.cell.com/current-biology/fulltext/S0960-9822(16)31394-X) (Current Biology) as an example.  
-
-This study examined how neurons in the lentiformis mesencephali (LM) brain region of three species of birds respond to visual motion across the retina.  
-
-This figure shows that in hummingbirds, these neurons respond to faster visual motion speeds than those in zebra finches or pigeons.  
+## Create and save panels as separate `ggplot` objects
 
 #### Figure 3 Panel A:
 **Re-create panel A from Gaede et al. 2017**
 
-```{r}
+```{r panel_A, echo=FALSE, warning=FALSE,message=FALSE}
 # First, import data
 fig_A <-
   read_csv("./Fig3A_data.csv") %>%
@@ -256,9 +264,9 @@ fig_A <-
 fig_A
 ```
 
-### Create and save panels as separate `ggplot` objects
-#### Figure 3 Panel B:
-```{r, echo=FALSE, warning=FALSE,message=FALSE}
+
+### Figure 3 Panel B:
+```{r panel_B, echo=FALSE, warning=FALSE,message=FALSE}
 ## Build the theme
 theme_548 <- theme_classic() +
     theme(
@@ -349,9 +357,9 @@ fig_B <- data_B %>%
 fig_B
 ```
 
-#### Figure 3 Panel C:
+### Figure 3 Panel C:
 
-```{r, echo=FALSE, warning=FALSE,message=FALSE}
+```{r panel_C, echo=FALSE, warning=FALSE,message=FALSE}
 data_C_raw <- read_csv("Fig3C_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
@@ -420,9 +428,9 @@ fig_C <- data_C %>%
 fig_C
 ```
 
-#### Figure 3 Panel D:
+### Figure 3 Panel D:
 
-```{r, echo=FALSE, warning=FALSE,message=FALSE}
+```{r panel_D, echo=FALSE, warning=FALSE,message=FALSE}
 data_D <- read_csv("Fig3D_data.csv") %>%
   mutate(
     perc_firing = perc_firing * 100,
@@ -448,8 +456,8 @@ fig_D <- data_D %>%
 fig_D
 ```
 
-#### Figure 3 Panel E:
-```{r, echo=FALSE, warning=FALSE,message=FALSE}
+### Figure 3 Panel E:
+```{r panel_E, echo=FALSE, warning=FALSE,message=FALSE}
 data_E <- read_csv("./Fig3E_data.csv") %>%
   mutate(species = c("hb", "zb", "pg")) %>%
   gather(key = speed, value = prop, -species)
@@ -487,8 +495,8 @@ fig_E <- data_E %>%
 fig_E
 ```
 
-#### Figure 3 Panel F:
-```{r, echo=FALSE, warning=FALSE,message=FALSE}
+### Figure 3 Panel F:
+```{r panel_F, echo=FALSE, warning=FALSE,message=FALSE}
 speeds_F <- c(0.24,0.5,1,2,4,8,16,24,32,48,64,80)
 data_F <- read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
@@ -536,7 +544,7 @@ fig_F <- data_F %>%
 fig_F
 ```
 
-#### Intro to cowplot
+## Intro to cowplot
 
 We'll go over `plot_grid()` basics.  
 `draw_image()` & `draw_grob()` can also be used with `ggplot()` & `plot_grid()`
@@ -547,34 +555,37 @@ We'll go over `plot_grid()` basics.
 * Each panel should be saved as a separate ggplot object beforehand and then each will be fed in as an argument to `plot_grid()`
 
 **Plot objects can be added sequentially**
-```{r}
+```{r add_plots_basic}
 plot_grid(fig_B, fig_C)
 ```
 
 **By default, additional panels are initially added within the same row.**  
-`plot_grid()` then tends to prefer to have ncol = nrow as best as possible:  
-```{r}
-plot_grid(fig_B, fig_C, fig_E,
+`plot_grid()` then tends to prefer to have `ncol` = `nrow` as best as possible. 
+I'll create an example by pasting `fig_B` over and over again. Each panel will 
+be numbered so you can track how plots are added sequentially within 
+`plot_grid()`.
+```{r sequential_adding}
+plot_grid(fig_B, fig_B, fig_B,
           labels=c("1","2","3"))
-plot_grid(fig_B, fig_C, fig_E, fig_F,
+plot_grid(fig_B, fig_B, fig_B, fig_B,
           labels=c("1","2","3","4"))
-plot_grid(fig_B, fig_C, fig_E, fig_F, fig_B,
+plot_grid(fig_B, fig_B, fig_B, fig_B, fig_B,
           labels=c("1","2","3","4","5"))
-plot_grid(fig_B, fig_C, fig_E, fig_F, fig_B, fig_C,
+plot_grid(fig_B, fig_B, fig_B, fig_B, fig_B, fig_B,
           labels=c("1","2","3","4","5","6"))
-plot_grid(fig_B, fig_C, fig_E, fig_F, fig_B, fig_C, fig_E,
+plot_grid(fig_B, fig_B, fig_B, fig_B, fig_B, fig_B, fig_B,
           labels=c("1","2","3","4","5","6","7"))
 ```
 
 **This looks okay, but we may prefer to have the plots arranged in one column.**  
 Let's first just focus on panels E and F.  
-```{r}
+```{r plot_grid_ncol}
 plot_grid(fig_E, fig_F,
           ncol = 1)
 ```
 
 **Cowplot also allows you to add labels to panels as you'd see in a journal article.**  
-```{r}
+```{r plot_grid_labels}
 plot_grid(fig_E, fig_F,
           ncol = 1,
           labels = c("E","F"))
@@ -582,7 +593,7 @@ plot_grid(fig_E, fig_F,
 
 **See the arguments of `cowplot::plot_grid()` to see how labels can be adjusted.**  
 We'll adjust the size and (temporarily) change to a serif font.  
-```{r}
+```{r plot_grid_label_aes}
 plot_grid(fig_E, fig_F,
           ncol = 1,
           labels = c("E","F"),
@@ -590,14 +601,18 @@ plot_grid(fig_E, fig_F,
           label_fontfamily = "serif")
 ```
 
-#### Re-create Gaede et al. 2017 Fig 3
+This looks horrible, but we're using extreme values here to emphasize what can
+be adjusted.
 
-##### Let's try to build Fig 3 from [Gaede et al. 2017](https://www.cell.com/current-biology/fulltext/S0960-9822(16)31394-X)
 
-The layout of the figure is complex; nrows and ncols can't be set easily. Luckily we can build sets of panels together, save each one, then stitch it all together at the end.  
+## Assemble panels for each section of Fig 3
+
+The layout of the figure is complex; nrows and ncols can't be set easily. 
+Luckily we can build sets of panels together, save each one, then stitch it all 
+together at the end.  
 
 **Let's start with panels E and F.**  
-```{r}
+```{r cow_EF}
 cow_EF <- plot_grid(fig_E, fig_F,
                     ncol = 1,
                     labels = c("E","F"),
@@ -607,9 +622,10 @@ cow_EF
 ```
 
 **For panel A, we'll adjust the padding around the margin.**  
-Within the argument `plot.margin`, the order is top, right, bottom, left; think TRouBLe (T,R,B,L)
+Within the argument `plot.margin`, the order is top, right, bottom, left; 
+think TRouBLe (T,R,B,L)
 
-```{r}
+```{r cow_A}
 fig_A <- fig_A + theme(plot.margin = unit(c(5.5, 5.5, 0, 5.5), units = "pt"))
 cow_A <- plot_grid(NULL, fig_A,
                    rel_widths = c(0.07, 0.93),
@@ -621,8 +637,12 @@ cow_A
 ```
 
 **Panels B and C**  
-When combining B and C, we should note that C has an x-axis label but B does not. Therefore, we will add blank plots (NULL) as padding and then adjust the relative heights to fit things comfortably. We still need to supply 4 labels, so "" will be used for blank plots.  
-```{r}
+When combining B and C, we should note that C has an x-axis label but B does 
+not. Therefore, we will add blank plots (NULL) as padding and then adjust the
+relative heights to fit things comfortably. We still need to supply 4 labels, 
+so "" will be used for blank plots.  
+
+```{r cow_BC}
 cow_BC <- plot_grid(NULL, fig_B, NULL, fig_C,
                     rel_heights = c(0.1, 1, -0.15, 1),
                     ncol = 1,
@@ -635,7 +655,7 @@ cow_BC
 
 **Panel D**  
 Similarly, with panel D, we'll add a NULL object to the cowplot and adjust the relative heights to the proportions we'd like.  
-```{r}
+```{r cow_D}
 fig_D <- fig_D + labs(y = "Number of speed bins above threshold    ")
 cow_D <- plot_grid(NULL, fig_D,
                     rel_heights = c(0.1, 1.85),
@@ -648,21 +668,21 @@ cow_D
 ```
 
 **You can cowplot multiple cowplots**  
-```{r}
+```{r cow_BCD}
 cow_BCD <- plot_grid(cow_BC, cow_D,
                      rel_widths = c(2,3),
                       nrow = 1)
 cow_BCD
 ```
 
-##### Now combine all the panels together:
+## Combine all the panels together
 
 It may help to specify the dimensions of the plot window to ensure that the plot is made with correct overall proportions.  
 try(`dev.off(), silent = T`)  
 `dev.new(width = 8, height = 11, units = "in")`
 
 **Now for the plot itself:**  
-```{r fig.height=11, fig.width=8.5}
+```{r cowAtoF,fig.height=11, fig.width=8.5}
 cow_A2F <- plot_grid(cow_A, NULL, cow_BCD, cow_EF,
           ncol = 1,
           # A negative rel_height shrinks space between elements
@@ -672,7 +692,7 @@ cow_A2F <- plot_grid(cow_A, NULL, cow_BCD, cow_EF,
 cow_A2F
 ```
 
-##### Adding icons to a multipanel plot:
+## The final step: Add icons to the multi-panel plot
 
 The bird heads and other legend elements are conspicuously absent. The `cowplot::draw_image()` function allows for an image to be placed on the canvas, which we'll use for the bird heads.  
 
@@ -714,47 +734,61 @@ cow_final <- ggdraw() +
 cow_final
 ```
 
-##### Saving multi-panel plots
 
-`cowplot::save_plot()` tends to work better with multi-panel figures than `ggsave()` does. You can specify size via base_height and base_width
+And there you have it! We have recreated the entire figure -- including 
+annotations, icons, and inserted images -- all through code. 
+
+Thanks for reading!
+
+🐢
+
+
+## Appendix
+
+### A1: Saving multi-panel plots
+
+`cowplot::save_plot()` tends to work better with multi-panel figures than 
+`ggsave()` does. You can specify size (in inches) via the arguments 
+`base_height` and `base_width` within `save_plot()`.
 
 **For example:**
 `save_plot("Gaedeetal_Fig3.svg", cow_final, base_height = 11, base_width = 8.5)`
 
-##### Using photographs with ggplot/cowplot
+
+### A2: Using photographs with ggplot/cowplot
 
 Often, you may opt to add a photograph as its own panel.
 
 **Here's a quick example:**
-```{r}
+```{r import_photo}
 photo <- "./photo.jpg"
 getwd()
 ```
 
 **Now create a ggplot object that features only the image.**
-```{r}
+```{r photo_panel}
 photo_panel <- ggdraw() + draw_image(photo, scale = 0.8)
 photo_panel
 ```
 
 **Now cowplot it!**
-```{r}
+```{r photo_plot}
 plot_grid(fig_F, photo_panel, ncol = 1)
 ```
 
 
+### A3: Using maps with ggplot/cowplot
 
-##### Using maps with ggplot/cowplot
-
-Adding in maps can be useful to showing geographic trends. The `maps` package allows for convenient plotting of (annotated) maps with `ggplot`.
+Adding in maps can be useful to showing geographic trends. The `maps` package 
+allows for convenient plotting of (annotated) maps with `ggplot()`.
 
 **Quick example. Load the 'world' map:**
-```{r}
+```{r map_data}
 w <- map_data("world")
 ```
 
 **If you'd, for whatever reason, like to highlight certain countries:**
-```{r}
+```{r fig_map}
 fig_map <- ggplot(w) +
   # This outlines all countries in grey70
   geom_polygon(aes(x = long, y = lat, group = group),
@@ -770,8 +804,12 @@ fig_map <- ggplot(w) +
 fig_map
 ```
 
-**This can be added to a cowplot rather easily:**
-```{r}
+**This map can be added to a cowplot rather easily:**
+```{r map_image_plot, fig.height=6, fig.width=6}
 plot_grid(fig_map, 
           photo_panel, 
           fig_F, ncol = 1)
+```
+
+
+🐢
