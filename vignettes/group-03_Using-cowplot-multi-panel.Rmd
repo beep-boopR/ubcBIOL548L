@@ -59,9 +59,8 @@ knitr::opts_chunk$set(
 
 This vignette is Part 3 of an R workshop created for 
 [BIOL 548L](http://www.biology.ubc.ca/course-listing-2/#500level-4), a 
-graduate-level course on data visualization taught through the 
-[Biology Program](http://www.biology.ubc.ca/)
-at the University of British Columbia. 
+graduate-level course on data visualization taught at the University of British 
+Columbia. 
 
 When the workshop runs, we split students into three groups with successively
 increasing levels of difficulty. **To make sense of what follows, we recommend 
