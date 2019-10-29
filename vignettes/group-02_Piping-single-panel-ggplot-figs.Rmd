@@ -1,5 +1,7 @@
 ---
 title: "Part 2: Piping and producing single-panel ggplot figures"
+author: "by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan"
+date: "Last updated on `r Sys.time()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{group-02}
