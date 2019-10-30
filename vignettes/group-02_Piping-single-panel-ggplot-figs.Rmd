@@ -47,8 +47,7 @@ knitr::opts_chunk$set(
 ## Introduction
 
 This vignette is Part 2 of 3 for an R workshop created for 
-[BIOL 548L](http://www.biology.ubc.ca/course-listing-2/#500level-4), a 
-graduate-level course on data visualization taught at the University of British 
+[BIOL 548L](http://www.biology.ubc.ca/course-listing-2/#500level-4), a graduate-level course on data visualization taught at the University of British 
 Columbia. 
 
 When the workshop runs, we split students into three groups with successively
@@ -56,6 +55,8 @@ increasing levels of difficulty. **To make sense of what follows, we recommend
 working through (or at least looking at) 
 [Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html).** 
  
+The goal of Part 2's vignette is to learn how to structure data to produce single plots ready for presentations and publications
+
 Part 3's vignette (which we recommend going through only *after* completing this
 page) can be found 
 [here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
@@ -63,15 +64,13 @@ page) can be found
 All code and contents of this vignette were written together by Vikram B. 
 Baliga, Andrea Gaede and Shreeram Senthivasan.  
 
-## Group 2: Learn how to structure data to produce single plots that are ready for presentations and publications
-
-### Learning Objectives:
+## Learning Objectives:
 1. Articulate the advantages of literate programming
 2. Employ piping to restructure data for tidyverse
 3. Describe the grammar of graphics that underlies plotting in ggplot
 4. Manipulate plots to improve clarity and maximize the data : ink ratio
 
-### Load or install&load packages
+## Load or install&load packages
 
 We'll first load packages that will be necessary. The `package.check()` function
 below is designed to first see if each package is already installed. If any 
@@ -119,7 +118,7 @@ package.check <- lapply(
 )
 ```
 
-### What is literate programming?
+## What is literate programming?
 
 Literate programming is a coding paradigm that rethinks the "grammar" of traditional code to more closely resemble writing in a human language, like English.  
 
@@ -131,7 +130,7 @@ In the tidyverse, we will largely use the analogy of variables as nouns and func
 
 The main way we will make our code literate however is with the pipe: %>%  
 
-### What is a pipe? 
+## What is a pipe? 
 A pipe, or %>% , is an operator that takes everything on the left and plugs it into the function on the right.  
 
 In short: x %>% f(y)  is equivalent to  f(x, y)  
@@ -146,7 +145,7 @@ gapminder %>%
 ```
 In RStudio you can use the shortcut CTRL/CMD + SHIFT + M to insert a pipe  
 
-### Why bother with pipes?  
+## Why bother with pipes?  
 To see how pipes can make code more readable, let's translate this simple cake recipe into pseudo R code:
 
 1. Cream together sugar and butter
@@ -204,7 +203,7 @@ frost(
 ```
 It's pretty clear why this is no good  
 
-### Piping
+## Piping
 
 **Now for the piping approach:**  
 ```{r, eval=FALSE}
@@ -232,7 +231,7 @@ The RStudio cheat sheets are a whole lot more useful once you start piping -- he
 
 [Other cheat sheets]("https://www.rstudio.com/resources/cheatsheets/")
 
-### Some prep work for the coding part of the lesson:
+## Some prep work for the coding part of the lesson:
 In this section our main goal will be to reproduce as closely as possible all the individual plots that make up Figure 3 in the [Gaede et al. 2017 paper](https://www.cell.com/current-biology/fulltext/S0960-9822(16)31394-X).  
 
 The one exception to that will be the legends and icons, which are easier to align and arrange when organizing the plots into a single multipanel figure, which is left for Group 3.  
@@ -246,15 +245,8 @@ col_zb <- "#F48D00"
 col_pg <- "#4AA4F2"
 ```
 
-### Fig 3 Panel D: 
-```{r}
-data_D <- read_csv("Fig3D_data.csv")
 
-# Visualize data
-data_D
-```
-
-**Anatomy of a ggplot**  
+## Anatomy of a ggplot
 `ggplot` is built around the idea of a "Grammar of Graphics" -- a way of describing (almost) any graphic.  
 
 There are three key components to any graphic under the Grammar of Graphics:
@@ -283,6 +275,14 @@ Other possibly relevant componenets include:
 * Coordinate systems (eg cartesian vs polar plots)
 * Scales (eg mapping specifc colours to groups)
 * Facets (subpanels of similar plots)
+
+## Build a boxplot with data superimposed (Figure 3 Panel D): 
+```{r}
+data_D <- read_csv("Fig3D_data.csv")
+
+# Visualize data
+data_D
+```
 
 **Let's make a ggplot!**
 ```{r, warning=FALSE}
@@ -472,7 +472,7 @@ fig_D <- data_D %>%
 fig_D
 ```
 
-### Fig 3 Panel E:
+## Build a grouped barplot (Figure 3 Panel E):
 **Visualize the data:**
 ```{r}
 read_csv("./Fig3E_data.csv")
@@ -577,7 +577,7 @@ fig_E <- data_E %>%
 fig_E
 ```
 
-### Fig 3 Panel B:
+## Build a line plot with error bars and other graphical features (Figure 3 Panel B):
 **Visualize data:**
 ```{r}
 read_csv("Fig3B_data.csv")
@@ -887,7 +887,7 @@ fig_B
 ```
 
 
-### Fig 3 Panel F:
+## Build another grouped barplot (Figure 3 Panel F):
 **Visualize data:**
 ```{r}
 read_csv("./Fig3F_data.csv")
@@ -1006,7 +1006,7 @@ fig_F <- data_F %>%
 fig_F
 ```
 
-### Fig 3 Panel C:
+## Build another line plot (Figure 3 Panel C):
 **Reorganize raw data:**
 ```{r}
 data_C_raw <- read_csv("Fig3C_data.csv") %>%
