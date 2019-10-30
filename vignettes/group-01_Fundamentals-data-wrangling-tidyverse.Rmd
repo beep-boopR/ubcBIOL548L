@@ -16,20 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(ubcBIOL548L)
-
-library(gapminder)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(tibble)
-library(readr)
-library(readxl)
-
-
-```
-
 
 ```{r, include = FALSE}
 
@@ -51,8 +37,7 @@ Columbia.
 
 When the workshop runs, we split students into three groups with successively
 increasing levels of difficulty. We recommend everyone starts here and works 
-through the code that follows. Once you are comfortable with the contents of 
-this page, please feel free to move on to
+through the code that follows. This vignette shows users how to load a clean data file into R and make boxplots and scatterplots. Once you are comfortable with the contents of this page, please feel free to move on to
 [Part 2](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html) and
 ultimately to Part 3 (which we recommend going through only *after* completing 
 Part 2) [here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
@@ -60,15 +45,27 @@ Part 2) [here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
 All code and contents of this vignette were written together by Vikram B. 
 Baliga, Andrea Gaede and Shreeram Senthivasan.  
 
-## Group 1: Load a clean data file into R and make boxplots and scatterplots
 
-### Learning Objectives:
+## Learning Objectives:
 1. Determine how to import and control data stored in different filetypes
 2. Understand the best practices for structuring data in *tidyverse/ggplot*
 3. Construct basic plots using *ggplot*
 
-### Lesson:  
-#### Importing data:
+## Load or install & load necessary packages
+Before running the code below, make sure you have the necessary packages loaded. If you do not have the packages listed below installed on your computer, then download them from the CRAN site using `install.packages()` and then load them with `library()` as shown below. 
+
+```{r setup}
+library(ubcBIOL548L)
+library(gapminder)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(tibble)
+library(readr)
+library(readxl)
+```
+
+## Importing and peeking at data:
 **Import data using base R command, and give it the name `my_data`**
 ```{r}
 my_data <- read.csv("gapminder.csv")
@@ -147,8 +144,7 @@ my_data <- read_csv("gapminder.csv",col_names = TRUE)
 my_data
 ```
 
-#### Plotting:  
-**Make a histogram**
+## Using qplot to make a histogram, scatter plot, or dot plot
 ```{r}
 # This command makes a histogram of the `lifeExp` column of the `my_data` dataset
 qplot(x = lifeExp, data = my_data)
@@ -178,6 +174,7 @@ qplot(x = gdpPercap, y = lifeExp, data = my_data, geom = 'point')
 qplot(x = continent, y = lifeExp, data = my_data, geom = 'boxplot')
 ```
 
+## How to quickly make plots with `qplot()` that are easy to interpret
 **Now let's change the number of bins in a histogram and make the plot prettier**
 ```{r}
 # The hidden argument `bins` has a default valute of 30
@@ -215,6 +212,7 @@ qplot(x = lifeExp,
       geom = 'histogram')
 ```
 
+## Log scale & trendline
 **Let's apply a log scale and add a trendline to a scatter plot**
 ```{r, warning=FALSE}
 # Note that x axis is compressed
@@ -243,7 +241,7 @@ qplot(x = gdpPercap,
       geom = c('point','smooth'))
 ```
 
-**Finally let's make a boxplot**
+## Building a boxplot using gapminder data
 ```{r}
 qplot(x = continent,
       y = lifeExp,
