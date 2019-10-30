@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Part 3: Using cowplot to construct multi-panel figures entirely via code • ubcBIOL548L</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Part 3: Using cowplot to construct multi-panel figures entirely via code">
 <meta property="og:description" content="">
@@ -88,7 +88,7 @@
       <h1>Part 3: Using cowplot to construct multi-panel figures entirely via code</h1>
                         <h4 class="author">by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
             
-            <h4 class="date">Last updated on 2019-10-29 15:01:41</h4>
+            <h4 class="date">Last updated on 2019-10-29 17:41:02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/beep-boopR/ubcBIOL548L/blob/master/vignettes/group-03_Using-cowplot-multi-panel.Rmd"><code>vignettes/group-03_Using-cowplot-multi-panel.Rmd</code></a></small>
       <div class="hidden name"><code>group-03_Using-cowplot-multi-panel.Rmd</code></div>
@@ -135,84 +135,84 @@
 <a href="#load-or-installload-packages" class="anchor"></a>Load or install&amp;load packages</h3>
 <p>We’ll first load packages that will be necessary. The <code>package.check()</code> function below is designed to first see if each package is already installed. If any aren’t, the function then installs them from CRAN. Then all the packages are loaded.</p>
 <p>The code block is modified from <a href="https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/">this blog post</a></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#library(ubcBIOL548L)</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">## Modified from: </span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">## https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">## First specify the packages of interest</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">packages &lt;-</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"gapminder"</span>,</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">    <span class="st">"ggplot2"</span>,</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10">    <span class="st">"tidyr"</span>,</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11">    <span class="st">"dplyr"</span>,</a>
-<a class="sourceLine" id="cb1-12" data-line-number="12">    <span class="st">"tibble"</span>,</a>
-<a class="sourceLine" id="cb1-13" data-line-number="13">    <span class="st">"readr"</span>,</a>
-<a class="sourceLine" id="cb1-14" data-line-number="14">    <span class="st">"forcats"</span>,</a>
-<a class="sourceLine" id="cb1-15" data-line-number="15">    <span class="st">"readxl"</span>,</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16">    <span class="st">"ggthemes"</span>,</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17">    <span class="st">"magick"</span>,</a>
-<a class="sourceLine" id="cb1-18" data-line-number="18">    <span class="st">"grid"</span>,</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19">    <span class="st">"cowplot"</span>,</a>
-<a class="sourceLine" id="cb1-20" data-line-number="20">    <span class="co"># ggmap and maps are optional; needed for creating maps</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21">    <span class="st">"ggmap"</span>,</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22">    <span class="st">"maps"</span>)</a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">## Now load or install&amp;load all packages</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24">package.check &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25">  packages,</a>
-<a class="sourceLine" id="cb1-26" data-line-number="26">  <span class="dt">FUN =</span> <span class="cf">function</span>(x)</a>
-<a class="sourceLine" id="cb1-27" data-line-number="27">  {</a>
-<a class="sourceLine" id="cb1-28" data-line-number="28">    <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(x, <span class="dt">character.only =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb1-29" data-line-number="29">    {</a>
-<a class="sourceLine" id="cb1-30" data-line-number="30">      <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(x, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb1-31" data-line-number="31">                       <span class="dt">repos =</span> <span class="st">"http://cran.us.r-project.org"</span>)</a>
-<a class="sourceLine" id="cb1-32" data-line-number="32">      <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(x, <span class="dt">character.only =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-33" data-line-number="33">    }</a>
-<a class="sourceLine" id="cb1-34" data-line-number="34">  }</a>
-<a class="sourceLine" id="cb1-35" data-line-number="35">)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">#library(ubcBIOL548L)</span></a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co">## Modified from: </span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co">## https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/</span></a>
+<a class="sourceLine" id="cb1-5" title="5"></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co">## First specify the packages of interest</span></a>
+<a class="sourceLine" id="cb1-7" title="7">packages &lt;-</a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"gapminder"</span>,</a>
+<a class="sourceLine" id="cb1-9" title="9">    <span class="st">"ggplot2"</span>,</a>
+<a class="sourceLine" id="cb1-10" title="10">    <span class="st">"tidyr"</span>,</a>
+<a class="sourceLine" id="cb1-11" title="11">    <span class="st">"dplyr"</span>,</a>
+<a class="sourceLine" id="cb1-12" title="12">    <span class="st">"tibble"</span>,</a>
+<a class="sourceLine" id="cb1-13" title="13">    <span class="st">"readr"</span>,</a>
+<a class="sourceLine" id="cb1-14" title="14">    <span class="st">"forcats"</span>,</a>
+<a class="sourceLine" id="cb1-15" title="15">    <span class="st">"readxl"</span>,</a>
+<a class="sourceLine" id="cb1-16" title="16">    <span class="st">"ggthemes"</span>,</a>
+<a class="sourceLine" id="cb1-17" title="17">    <span class="st">"magick"</span>,</a>
+<a class="sourceLine" id="cb1-18" title="18">    <span class="st">"grid"</span>,</a>
+<a class="sourceLine" id="cb1-19" title="19">    <span class="st">"cowplot"</span>,</a>
+<a class="sourceLine" id="cb1-20" title="20">    <span class="co"># ggmap and maps are optional; needed for creating maps</span></a>
+<a class="sourceLine" id="cb1-21" title="21">    <span class="st">"ggmap"</span>,</a>
+<a class="sourceLine" id="cb1-22" title="22">    <span class="st">"maps"</span>)</a>
+<a class="sourceLine" id="cb1-23" title="23"><span class="co">## Now load or install&amp;load all packages</span></a>
+<a class="sourceLine" id="cb1-24" title="24">package.check &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(</a>
+<a class="sourceLine" id="cb1-25" title="25">  packages,</a>
+<a class="sourceLine" id="cb1-26" title="26">  <span class="dt">FUN =</span> <span class="cf">function</span>(x)</a>
+<a class="sourceLine" id="cb1-27" title="27">  {</a>
+<a class="sourceLine" id="cb1-28" title="28">    <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span>(x, <span class="dt">character.only =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb1-29" title="29">    {</a>
+<a class="sourceLine" id="cb1-30" title="30">      <span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(x, <span class="dt">dependencies =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb1-31" title="31">                       <span class="dt">repos =</span> <span class="st">"http://cran.us.r-project.org"</span>)</a>
+<a class="sourceLine" id="cb1-32" title="32">      <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(x, <span class="dt">character.only =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-33" title="33">    }</a>
+<a class="sourceLine" id="cb1-34" title="34">  }</a>
+<a class="sourceLine" id="cb1-35" title="35">)</a></code></pre></div>
 <div id="prep-work-for-figure-legends" class="section level4">
 <h4 class="hasAnchor">
 <a href="#prep-work-for-figure-legends" class="anchor"></a>Prep work for figure legends:</h4>
 <p>In prep for creating the figure, we will use the code below to import the bird head icons that appear in the legend of each panel. Please note that these images were drawn beforehand and saved as PNG files.</p>
 <p>We will also assign each species a distinct color and create colored rectangles that will also be part of the panel legends.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">## Bird head icons</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">icon_hb &lt;-<span class="st"> "hummingbird.png"</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">icon_zb &lt;-<span class="st"> "zeebie.png"</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">icon_pg &lt;-<span class="st"> "pigeon.png"</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">## Colors for the different birds</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">col_hb &lt;-<span class="st"> "#ED0080"</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">col_zb &lt;-<span class="st"> "#F48D00"</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">col_pg &lt;-<span class="st"> "#4AA4F2"</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">## Rectangles within legends</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">rect_hb   &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">height =</span> <span class="dv">1</span>, <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_hb))</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">rect_hb_t &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">               <span class="dt">width =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">               <span class="dt">height =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_hb, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">             )</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">rect_zb   &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">height =</span> <span class="dv">1</span>, <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_zb))</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">rect_zb_t &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">               <span class="dt">width =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">               <span class="dt">height =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_zb, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">             )</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24">rect_pg   &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">height =</span> <span class="dv">1</span>, <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_pg))</a>
-<a class="sourceLine" id="cb2-25" data-line-number="25">point_hb  &lt;-<span class="st"> </span><span class="kw">pointsGrob</span>(</a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">               <span class="dt">x =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27">               <span class="dt">y =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb2-28" data-line-number="28">               <span class="dt">pch =</span> <span class="dv">24</span>,</a>
-<a class="sourceLine" id="cb2-29" data-line-number="29">               <span class="dt">size =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="dt">units =</span> <span class="st">"char"</span>),</a>
-<a class="sourceLine" id="cb2-30" data-line-number="30">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_hb)</a>
-<a class="sourceLine" id="cb2-31" data-line-number="31">             )</a>
-<a class="sourceLine" id="cb2-32" data-line-number="32">point_zb  &lt;-<span class="st"> </span><span class="kw">pointsGrob</span>(</a>
-<a class="sourceLine" id="cb2-33" data-line-number="33">               <span class="dt">x =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb2-34" data-line-number="34">               <span class="dt">y =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb2-35" data-line-number="35">               <span class="dt">pch =</span> <span class="dv">21</span>,</a>
-<a class="sourceLine" id="cb2-36" data-line-number="36">               <span class="dt">size =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="dt">units =</span> <span class="st">"char"</span>),</a>
-<a class="sourceLine" id="cb2-37" data-line-number="37">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_zb)</a>
-<a class="sourceLine" id="cb2-38" data-line-number="38">             )</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">## Bird head icons</span></a>
+<a class="sourceLine" id="cb2-2" title="2">icon_hb &lt;-<span class="st"> "hummingbird.png"</span></a>
+<a class="sourceLine" id="cb2-3" title="3">icon_zb &lt;-<span class="st"> "zeebie.png"</span></a>
+<a class="sourceLine" id="cb2-4" title="4">icon_pg &lt;-<span class="st"> "pigeon.png"</span></a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">## Colors for the different birds</span></a>
+<a class="sourceLine" id="cb2-7" title="7">col_hb &lt;-<span class="st"> "#ED0080"</span></a>
+<a class="sourceLine" id="cb2-8" title="8">col_zb &lt;-<span class="st"> "#F48D00"</span></a>
+<a class="sourceLine" id="cb2-9" title="9">col_pg &lt;-<span class="st"> "#4AA4F2"</span></a>
+<a class="sourceLine" id="cb2-10" title="10"></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">## Rectangles within legends</span></a>
+<a class="sourceLine" id="cb2-12" title="12">rect_hb   &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">height =</span> <span class="dv">1</span>, <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_hb))</a>
+<a class="sourceLine" id="cb2-13" title="13">rect_hb_t &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(</a>
+<a class="sourceLine" id="cb2-14" title="14">               <span class="dt">width =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb2-15" title="15">               <span class="dt">height =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb2-16" title="16">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_hb, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb2-17" title="17">             )</a>
+<a class="sourceLine" id="cb2-18" title="18">rect_zb   &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">height =</span> <span class="dv">1</span>, <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_zb))</a>
+<a class="sourceLine" id="cb2-19" title="19">rect_zb_t &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(</a>
+<a class="sourceLine" id="cb2-20" title="20">               <span class="dt">width =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb2-21" title="21">               <span class="dt">height =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb2-22" title="22">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_zb, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb2-23" title="23">             )</a>
+<a class="sourceLine" id="cb2-24" title="24">rect_pg   &lt;-<span class="st"> </span><span class="kw">rectGrob</span>(<span class="dt">width =</span> <span class="dv">2</span>, <span class="dt">height =</span> <span class="dv">1</span>, <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_pg))</a>
+<a class="sourceLine" id="cb2-25" title="25">point_hb  &lt;-<span class="st"> </span><span class="kw">pointsGrob</span>(</a>
+<a class="sourceLine" id="cb2-26" title="26">               <span class="dt">x =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-27" title="27">               <span class="dt">y =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-28" title="28">               <span class="dt">pch =</span> <span class="dv">24</span>,</a>
+<a class="sourceLine" id="cb2-29" title="29">               <span class="dt">size =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="dt">units =</span> <span class="st">"char"</span>),</a>
+<a class="sourceLine" id="cb2-30" title="30">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_hb)</a>
+<a class="sourceLine" id="cb2-31" title="31">             )</a>
+<a class="sourceLine" id="cb2-32" title="32">point_zb  &lt;-<span class="st"> </span><span class="kw">pointsGrob</span>(</a>
+<a class="sourceLine" id="cb2-33" title="33">               <span class="dt">x =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-34" title="34">               <span class="dt">y =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-35" title="35">               <span class="dt">pch =</span> <span class="dv">21</span>,</a>
+<a class="sourceLine" id="cb2-36" title="36">               <span class="dt">size =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="dt">units =</span> <span class="st">"char"</span>),</a>
+<a class="sourceLine" id="cb2-37" title="37">               <span class="dt">gp =</span> <span class="kw">gpar</span>(<span class="dt">fill =</span> col_zb)</a>
+<a class="sourceLine" id="cb2-38" title="38">             )</a></code></pre></div>
 </div>
 </div>
 </div>
@@ -265,35 +265,35 @@
 </li>
 </ul>
 <p><strong>Plot objects can be added sequentially</strong></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_B, fig_C)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_C)</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/add_plots_basic-1.png" width="700"></p>
 <p><strong>By default, additional panels are initially added within the same row.</strong><br><code>plot_grid()</code> then tends to prefer to have <code>ncol</code> = <code>nrow</code> as best as possible. I’ll create an example by pasting <code>fig_B</code> over and over again. Each panel will be numbered so you can track how plots are added sequentially within <code>plot_grid()</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_B, fig_B, fig_B,</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_B, fig_B,</a>
+<a class="sourceLine" id="cb4-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>))</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/sequential_adding-1.png" width="700"></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_B, fig_B, fig_B, fig_B,</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_B, fig_B, fig_B,</a>
+<a class="sourceLine" id="cb5-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>))</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/sequential_adding-2.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_B, fig_B, fig_B, fig_B, fig_B,</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">plot_grid</span>(fig_B, fig_B, fig_B, fig_B, fig_B,</a>
+<a class="sourceLine" id="cb6-2" title="2">          <span class="dt">labels=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>,<span class="st">"2"</span>,<span class="st">"3"</span>,<span class="st">"4"</span>,<span class="st">"5"</span>))</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/sequential_adding-3.png" width="700"></p>
 <p><strong>This looks okay, but we may prefer to have the plots arranged in one column.</strong><br>
 Let’s first just focus on panels E and F.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">          <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
+<a class="sourceLine" id="cb7-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/plot_grid_ncol-1.png" width="700"></p>
 <p><strong>Cowplot also allows you to add labels to panels as you’d see in a journal article.</strong></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">          <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
+<a class="sourceLine" id="cb8-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb8-3" title="3">          <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>))</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/plot_grid_labels-1.png" width="700"></p>
 <p><strong>See the arguments of <code><a href="https://rdrr.io/pkg/cowplot/man/plot_grid.html">cowplot::plot_grid()</a></code> to see how labels can be adjusted.</strong><br>
 We’ll adjust the size and (temporarily) change to a serif font.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">          <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>),</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">          <span class="dt">label_size =</span> <span class="dv">40</span>,</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">          <span class="dt">label_fontfamily =</span> <span class="st">"serif"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
+<a class="sourceLine" id="cb9-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb9-3" title="3">          <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>),</a>
+<a class="sourceLine" id="cb9-4" title="4">          <span class="dt">label_size =</span> <span class="dv">40</span>,</a>
+<a class="sourceLine" id="cb9-5" title="5">          <span class="dt">label_fontfamily =</span> <span class="st">"serif"</span>)</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/plot_grid_label_aes-1.png" width="700"></p>
 <p>This looks horrible, but we’re using extreme values here to emphasize what can be adjusted.</p>
 </div>
@@ -303,56 +303,61 @@ We’ll adjust the size and (temporarily) change to a serif font.</p>
 <a href="#now-start-assemble-sets-of-panels-for-each-section-of-fig-3" class="anchor"></a>Now start assemble sets of panels for each section of Fig 3</h2>
 <p>The layout of the figure is complex; <code>nrows</code> and <code>ncols</code> can’t be set easily. Luckily we can build sets of panels together, save each one, then stitch it all together at the end.</p>
 <p><strong>Let’s start with panels E and F.</strong></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">cow_EF &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">                    <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">                    <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>),</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6">cow_EF</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">cow_EF &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(fig_E, fig_F,</a>
+<a class="sourceLine" id="cb10-2" title="2">                    <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb10-3" title="3">                    <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E"</span>,<span class="st">"F"</span>),</a>
+<a class="sourceLine" id="cb10-4" title="4">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
+<a class="sourceLine" id="cb10-5" title="5">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
+<a class="sourceLine" id="cb10-6" title="6">cow_EF</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_EF-1.png" width="700"></p>
 <p><strong>For panel A, we’ll adjust the padding around the margin.</strong><br>
 Within the argument <code>plot.margin</code>, the order is top, right, bottom, left; think TRouBLe (T,R,B,L)</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">fig_A &lt;-<span class="st"> </span>fig_A <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">unit</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5.5</span>, <span class="fl">5.5</span>, <span class="dv">0</span>, <span class="fl">5.5</span>), <span class="dt">units =</span> <span class="st">"pt"</span>))</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">cow_A &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_A,</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">                   <span class="dt">rel_widths =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.07</span>, <span class="fl">0.93</span>),</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">                   <span class="dt">nrow =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">                   <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>,<span class="st">""</span>),</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">                   <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">                   <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">cow_A</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">fig_A &lt;-<span class="st"> </span>fig_A <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">plot.margin =</span> <span class="kw">unit</span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">5.5</span>, <span class="fl">5.5</span>, <span class="dv">0</span>, <span class="fl">5.5</span>), <span class="dt">units =</span> <span class="st">"pt"</span>))</a>
+<a class="sourceLine" id="cb11-2" title="2">cow_A &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_A,</a>
+<a class="sourceLine" id="cb11-3" title="3">                   <span class="dt">rel_widths =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.07</span>, <span class="fl">0.93</span>),</a>
+<a class="sourceLine" id="cb11-4" title="4">                   <span class="dt">nrow =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb11-5" title="5">                   <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>,<span class="st">""</span>),</a>
+<a class="sourceLine" id="cb11-6" title="6">                   <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
+<a class="sourceLine" id="cb11-7" title="7">                   <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
+<a class="sourceLine" id="cb11-8" title="8">cow_A</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_A-1.png" width="700"></p>
 <p><strong>Panels B and C</strong><br>
 When combining B and C, we should note that C has an x-axis label but B does not. Therefore, we will add blank plots (NULL) as padding and then adjust the relative heights to fit things comfortably. We still need to supply 4 labels, so "" will be used for blank plots.</p>
 <p>One neat trick is that using a negative number within <code>rel_heights</code> reduces space between plots (or elements). We can use this to reduce the gap between panels if we don’t like how <code>cowplot</code> handles things by default.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">cow_BC &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_B, <span class="ot">NULL</span>, fig_C,</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">                    <span class="co"># A negative rel_height shrinks space between elements</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">                    <span class="dt">rel_heights =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="fl">-0.15</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">                    <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">                    <span class="dt">label_y =</span> <span class="fl">1.07</span>,</a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">                    <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>,<span class="st">"B"</span>,<span class="st">""</span>,<span class="st">"C"</span>),</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
-<a class="sourceLine" id="cb12-8" data-line-number="8">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
-<a class="sourceLine" id="cb12-9" data-line-number="9">cow_BC</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">cow_BC &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_B, <span class="ot">NULL</span>, fig_C,</a>
+<a class="sourceLine" id="cb12-2" title="2">                    <span class="co"># A negative rel_height shrinks space between elements</span></a>
+<a class="sourceLine" id="cb12-3" title="3">                    <span class="dt">rel_heights =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>, <span class="dv">1</span>, <span class="fl">-0.15</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb12-4" title="4">                    <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb12-5" title="5">                    <span class="dt">label_y =</span> <span class="fl">1.07</span>,</a>
+<a class="sourceLine" id="cb12-6" title="6">                    <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>,<span class="st">"B"</span>,<span class="st">""</span>,<span class="st">"C"</span>),</a>
+<a class="sourceLine" id="cb12-7" title="7">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
+<a class="sourceLine" id="cb12-8" title="8">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
+<a class="sourceLine" id="cb12-9" title="9">cow_BC</a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_BC-1.png" width="700"></p>
 <p><strong>Panel D</strong><br>
 Similarly, with panel D, we’ll add a <code>NULL</code> object to the cowplot and adjust the relative heights to the proportions we’d like.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">fig_D &lt;-<span class="st"> </span>fig_D <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">"Number of speed bins above threshold    "</span>)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">cow_D &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_D,</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">                    <span class="dt">rel_heights =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>, <span class="fl">1.85</span>),</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">                    <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">                    <span class="dt">label_y =</span> <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.07</span> <span class="op">/</span><span class="fl">1.85</span>,</a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">                    <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>,<span class="st">"D"</span>),</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
-<a class="sourceLine" id="cb13-8" data-line-number="8">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; Warning: Removed 770 rows containing non-finite values (stat_boxplot).</span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt; Warning: Removed 770 rows containing missing values (geom_point).</span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11">cow_D</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">fig_D &lt;-<span class="st"> </span>fig_D <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">"Number of speed bins above threshold    "</span>)</a>
+<a class="sourceLine" id="cb13-2" title="2">cow_D &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(<span class="ot">NULL</span>, fig_D,</a>
+<a class="sourceLine" id="cb13-3" title="3">                    <span class="dt">rel_heights =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.1</span>, <span class="fl">1.85</span>),</a>
+<a class="sourceLine" id="cb13-4" title="4">                    <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb13-5" title="5">                    <span class="dt">label_y =</span> <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.07</span> <span class="op">/</span><span class="fl">1.85</span>,</a>
+<a class="sourceLine" id="cb13-6" title="6">                    <span class="dt">labels =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>,<span class="st">"D"</span>),</a>
+<a class="sourceLine" id="cb13-7" title="7">                    <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
+<a class="sourceLine" id="cb13-8" title="8">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="co">#&gt; Warning: Removed 770 rows containing non-finite values (stat_boxplot).</span></a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="co">#&gt; Warning: Removed 770 rows containing missing values (geom_point).</span></a>
+<a class="sourceLine" id="cb13-11" title="11">cow_D</a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_D-1.png" width="700"></p>
 <p><strong>You can cowplot multiple cowplots</strong></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">cow_BCD &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_BC, cow_D,</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">                     <span class="dt">rel_widths =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>),</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">                      <span class="dt">nrow =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">cow_BCD</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">cow_BCD &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_BC, cow_D,</a>
+<a class="sourceLine" id="cb14-2" title="2">                     <span class="dt">rel_widths =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb14-3" title="3">                      <span class="dt">nrow =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a>
+<a class="sourceLine" id="cb14-5" title="5"></a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a>
+<a class="sourceLine" id="cb14-7" title="7">cow_BCD</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_BCD-1.png" width="700"></p>
 </div>
 <div id="combine-all-the-sets-of-panels-together" class="section level2">
@@ -361,13 +366,13 @@ Similarly, with panel D, we’ll add a <code>NULL</code> object to the cowplot a
 <p>It may help to specify the dimensions of the plot window to ensure that the plot is made with correct overall proportions.<br>
 try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDevices/dev.html">dev.new(width = 8, height = 11, units = "in")</a></code></p>
 <p><strong>Now for the plot itself:</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">cow_A2F &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_A, <span class="ot">NULL</span>, cow_BCD, cow_EF,</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">          <span class="co"># A negative rel_height shrinks space between elements</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">          <span class="dt">rel_heights =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1.2</span>, <span class="fl">-0.2</span>, <span class="fl">2.5</span>, <span class="dv">3</span>),</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5">          <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">          <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">cow_A2F</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">cow_A2F &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_A, <span class="ot">NULL</span>, cow_BCD, cow_EF,</a>
+<a class="sourceLine" id="cb15-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb15-3" title="3">          <span class="co"># A negative rel_height shrinks space between elements</span></a>
+<a class="sourceLine" id="cb15-4" title="4">          <span class="dt">rel_heights =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1.2</span>, <span class="fl">-0.2</span>, <span class="fl">2.5</span>, <span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb15-5" title="5">          <span class="dt">label_size =</span> <span class="dv">18</span>,</a>
+<a class="sourceLine" id="cb15-6" title="6">          <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
+<a class="sourceLine" id="cb15-7" title="7">cow_A2F</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cowAtoF-1.png" width="816"></p>
 </div>
 <div id="the-final-step-add-icons-to-the-multi-panel-plot" class="section level2">
@@ -377,33 +382,33 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <p>Similarly, <code><a href="https://rdrr.io/pkg/cowplot/man/draw_grob.html">cowplot::draw_grob()</a></code> places grobs (GRaphical OBjects). We’ll use this to add in colored rectangles for the legends.</p>
 <p>Each image’s (or <code>grob</code>’s) location is specified with x- and y- coordinates. Each runs from 0 to 1, with (0,0) being the lower left corner of the canvas.</p>
 <p>At the moment, vectorization of the code you see below doesn’t seem possible. It’s a bit tedious (ok, VERY tedious. And un-tidy!) but it works!</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">cow_final &lt;-<span class="st"> </span><span class="kw">ggdraw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">  </span><span class="kw">draw_plot</span>(cow_A2F) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="st">  </span><span class="co"># Hummingbird heads</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.445</span>, <span class="dt">y =</span>  <span class="fl">0.445</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel A</span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.350</span>, <span class="dt">y =</span>  <span class="fl">0.305</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel B</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span>  <span class="fl">0.445</span>, <span class="dt">y =</span>  <span class="fl">0.280</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel D</span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.280</span>, <span class="dt">y =</span> <span class="fl">-0.073</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel E</span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.280</span>, <span class="dt">y =</span> <span class="fl">-0.313</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel F</span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="st">  </span><span class="co"># Zebra finch heads</span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span> <span class="fl">-0.360</span>, <span class="dt">y =</span>  <span class="fl">0.135</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel C</span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span>  <span class="fl">0.435</span>, <span class="dt">y =</span>  <span class="fl">0.250</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel D</span></a>
-<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span> <span class="fl">-0.290</span>, <span class="dt">y =</span> <span class="fl">-0.100</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel E</span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span> <span class="fl">-0.290</span>, <span class="dt">y =</span> <span class="fl">-0.340</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel F</span></a>
-<a class="sourceLine" id="cb16-14" data-line-number="14"><span class="st">  </span><span class="co"># Pigeon head</span></a>
-<a class="sourceLine" id="cb16-15" data-line-number="15"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_pg, <span class="dt">x =</span> <span class="fl">-0.290</span>, <span class="dt">y =</span> <span class="fl">-0.130</span>, <span class="dt">scale =</span> <span class="fl">0.055</span>) <span class="op">+</span><span class="co"># Panel E</span></a>
-<a class="sourceLine" id="cb16-16" data-line-number="16"><span class="st">  </span><span class="co"># Boxes</span></a>
-<a class="sourceLine" id="cb16-17" data-line-number="17"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_hb_t, <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.280</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-18" data-line-number="18"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_zb_t, <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.253</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-19" data-line-number="19"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_hb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.073</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-20" data-line-number="20"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_zb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.099</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-21" data-line-number="21"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_pg,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.125</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-22" data-line-number="22"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_hb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.313</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-23" data-line-number="23"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_zb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.337</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-24" data-line-number="24"><span class="st">  </span><span class="co"># Points</span></a>
-<a class="sourceLine" id="cb16-25" data-line-number="25"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> point_hb,  <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.280</span>, <span class="dt">scale =</span> <span class="fl">0.001</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb16-26" data-line-number="26"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> point_zb,  <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.253</span>, <span class="dt">scale =</span> <span class="fl">0.001</span>)</a>
-<a class="sourceLine" id="cb16-27" data-line-number="27">cow_final</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">cow_final &lt;-<span class="st"> </span><span class="kw">ggdraw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="st">  </span><span class="kw">draw_plot</span>(cow_A2F) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="co"># Hummingbird heads</span></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.445</span>, <span class="dt">y =</span>  <span class="fl">0.445</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel A</span></a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.350</span>, <span class="dt">y =</span>  <span class="fl">0.305</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel B</span></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span>  <span class="fl">0.445</span>, <span class="dt">y =</span>  <span class="fl">0.280</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel D</span></a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.280</span>, <span class="dt">y =</span> <span class="fl">-0.073</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel E</span></a>
+<a class="sourceLine" id="cb16-8" title="8"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_hb, <span class="dt">x =</span> <span class="fl">-0.280</span>, <span class="dt">y =</span> <span class="fl">-0.313</span>, <span class="dt">scale =</span> <span class="fl">0.060</span>) <span class="op">+</span><span class="co"># Panel F</span></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="st">  </span><span class="co"># Zebra finch heads</span></a>
+<a class="sourceLine" id="cb16-10" title="10"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span> <span class="fl">-0.360</span>, <span class="dt">y =</span>  <span class="fl">0.135</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel C</span></a>
+<a class="sourceLine" id="cb16-11" title="11"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span>  <span class="fl">0.435</span>, <span class="dt">y =</span>  <span class="fl">0.250</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel D</span></a>
+<a class="sourceLine" id="cb16-12" title="12"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span> <span class="fl">-0.290</span>, <span class="dt">y =</span> <span class="fl">-0.100</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel E</span></a>
+<a class="sourceLine" id="cb16-13" title="13"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_zb, <span class="dt">x =</span> <span class="fl">-0.290</span>, <span class="dt">y =</span> <span class="fl">-0.340</span>, <span class="dt">scale =</span> <span class="fl">0.052</span>) <span class="op">+</span><span class="co"># Panel F</span></a>
+<a class="sourceLine" id="cb16-14" title="14"><span class="st">  </span><span class="co"># Pigeon head</span></a>
+<a class="sourceLine" id="cb16-15" title="15"><span class="st">  </span><span class="kw">draw_image</span>(<span class="dt">image =</span> icon_pg, <span class="dt">x =</span> <span class="fl">-0.290</span>, <span class="dt">y =</span> <span class="fl">-0.130</span>, <span class="dt">scale =</span> <span class="fl">0.055</span>) <span class="op">+</span><span class="co"># Panel E</span></a>
+<a class="sourceLine" id="cb16-16" title="16"><span class="st">  </span><span class="co"># Boxes</span></a>
+<a class="sourceLine" id="cb16-17" title="17"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_hb_t, <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.280</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-18" title="18"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_zb_t, <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.253</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-19" title="19"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_hb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.073</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-20" title="20"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_zb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.099</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-21" title="21"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_pg,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.125</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-22" title="22"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_hb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.313</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-23" title="23"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> rect_zb,   <span class="dt">x =</span> <span class="fl">-0.340</span>, <span class="dt">y =</span> <span class="fl">-0.337</span>, <span class="dt">scale =</span> <span class="fl">0.010</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-24" title="24"><span class="st">  </span><span class="co"># Points</span></a>
+<a class="sourceLine" id="cb16-25" title="25"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> point_hb,  <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.280</span>, <span class="dt">scale =</span> <span class="fl">0.001</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb16-26" title="26"><span class="st">  </span><span class="kw">draw_grob</span>(<span class="dt">grob =</span> point_zb,  <span class="dt">x =</span>  <span class="fl">0.390</span>, <span class="dt">y =</span>  <span class="fl">0.253</span>, <span class="dt">scale =</span> <span class="fl">0.001</span>)</a>
+<a class="sourceLine" id="cb16-27" title="27">cow_final</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/fig3_final-1.png" width="816"></p>
 <p>And there you have it! <strong>We have recreated the entire figure – including annotations, icons, and inserted images – all through code.</strong></p>
 <p>Thanks for reading!</p>
@@ -423,15 +428,15 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <a href="#a2-using-photographs-with-ggplotcowplot" class="anchor"></a>A2: Using photographs with ggplot/cowplot</h3>
 <p>Often, you may opt to add a photograph as its own panel.</p>
 <p><strong>Here’s a quick example:</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">photo &lt;-<span class="st"> "./photo.jpg"</span></a>
-<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span>()</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#&gt; [1] "/Users/dre/Documents/Projects/ubcBIOL548L/vignettes"</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">photo &lt;-<span class="st"> "./photo.jpg"</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span>()</a>
+<a class="sourceLine" id="cb17-3" title="3"><span class="co">#&gt; [1] "X:/Dropbox/BIOL548L/UBC-BIOL548L/vignettes"</span></a></code></pre></div>
 <p><strong>Now create a ggplot object that features only the image.</strong></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">photo_panel &lt;-<span class="st"> </span><span class="kw">ggdraw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">draw_image</span>(photo, <span class="dt">scale =</span> <span class="fl">0.8</span>)</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">photo_panel</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">photo_panel &lt;-<span class="st"> </span><span class="kw">ggdraw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">draw_image</span>(photo, <span class="dt">scale =</span> <span class="fl">0.8</span>)</a>
+<a class="sourceLine" id="cb18-2" title="2">photo_panel</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/photo_panel-1.png" width="700"></p>
 <p><strong>Now cowplot it!</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_F, photo_panel, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">plot_grid</span>(fig_F, photo_panel, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/photo_plot-1.png" width="700"></p>
 </div>
 <div id="a3-using-maps-with-ggplotcowplot" class="section level3">
@@ -439,26 +444,26 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <a href="#a3-using-maps-with-ggplotcowplot" class="anchor"></a>A3: Using maps with ggplot/cowplot</h3>
 <p>Adding in maps can be useful to showing geographic trends. The <code>maps</code> package allows for convenient plotting of (annotated) maps with <code>ggplot()</code>.</p>
 <p><strong>Quick example. Load the ‘world’ map:</strong></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">w &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">"world"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">w &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">"world"</span>)</a></code></pre></div>
 <p><strong>If you’d, for whatever reason, like to highlight certain countries:</strong></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">fig_map &lt;-<span class="st"> </span><span class="kw">ggplot</span>(w) <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="st">  </span><span class="co"># This outlines all countries in grey70</span></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">               <span class="dt">fill =</span> <span class="st">"white"</span>, <span class="dt">colour =</span> <span class="st">"grey70"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="st">  </span><span class="co"># Let's highlight some countries in dogdgerblue fill</span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),</a>
-<a class="sourceLine" id="cb21-7" data-line-number="7">               <span class="dt">fill =</span> <span class="st">"dodgerblue"</span>, <span class="dt">colour =</span> <span class="st">"black"</span>,</a>
-<a class="sourceLine" id="cb21-8" data-line-number="8">               <span class="dt">data =</span> <span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(w, region <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Chad"</span>, <span class="st">"China"</span>, <span class="st">"New Zealand"</span>,</a>
-<a class="sourceLine" id="cb21-9" data-line-number="9">                                              <span class="st">"Portugal"</span>, <span class="st">"Switzerland"</span>))) <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-10" data-line-number="10"><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="st">  </span><span class="co"># Nuke the theme for simplicity.</span></a>
-<a class="sourceLine" id="cb21-12" data-line-number="12"><span class="st">  </span><span class="kw">theme_nothing</span>()</a>
-<a class="sourceLine" id="cb21-13" data-line-number="13">fig_map</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">fig_map &lt;-<span class="st"> </span><span class="kw">ggplot</span>(w) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="st">  </span><span class="co"># This outlines all countries in grey70</span></a>
+<a class="sourceLine" id="cb21-3" title="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),</a>
+<a class="sourceLine" id="cb21-4" title="4">               <span class="dt">fill =</span> <span class="st">"white"</span>, <span class="dt">colour =</span> <span class="st">"grey70"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-5" title="5"><span class="st">  </span><span class="co"># Let's highlight some countries in dogdgerblue fill</span></a>
+<a class="sourceLine" id="cb21-6" title="6"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),</a>
+<a class="sourceLine" id="cb21-7" title="7">               <span class="dt">fill =</span> <span class="st">"dodgerblue"</span>, <span class="dt">colour =</span> <span class="st">"black"</span>,</a>
+<a class="sourceLine" id="cb21-8" title="8">               <span class="dt">data =</span> <span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(w, region <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Chad"</span>, <span class="st">"China"</span>, <span class="st">"New Zealand"</span>,</a>
+<a class="sourceLine" id="cb21-9" title="9">                                              <span class="st">"Portugal"</span>, <span class="st">"Switzerland"</span>))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-10" title="10"><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="fl">1.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb21-11" title="11"><span class="st">  </span><span class="co"># Nuke the theme for simplicity.</span></a>
+<a class="sourceLine" id="cb21-12" title="12"><span class="st">  </span><span class="kw">theme_nothing</span>()</a>
+<a class="sourceLine" id="cb21-13" title="13">fig_map</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/fig_map-1.png" width="700"></p>
 <p><strong>This map can be added to a cowplot rather easily:</strong></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">plot_grid</span>(fig_map, </a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">          photo_panel, </a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">          fig_F, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">plot_grid</span>(fig_map, </a>
+<a class="sourceLine" id="cb22-2" title="2">          photo_panel, </a>
+<a class="sourceLine" id="cb22-3" title="3">          fig_F, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/map_image_plot-1.png" width="576"></p>
 <p>🐢</p>
 </div>
@@ -494,7 +499,7 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.9000.</p>
 </div>
 
       </footer>
