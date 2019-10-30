@@ -88,7 +88,7 @@
       <h1>Part 2: Piping and producing single-panel ggplot figures</h1>
                         <h4 class="author">by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
             
-            <h4 class="date">Last updated on 2019-10-30 14:26:54</h4>
+            <h4 class="date">Last updated on 2019-10-30 14:45:46</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/beep-boopR/ubcBIOL548L/blob/master/vignettes/group-02_Piping-single-panel-ggplot-figs.Rmd"><code>vignettes/group-02_Piping-single-panel-ggplot-figs.Rmd</code></a></small>
       <div class="hidden name"><code>group-02_Piping-single-panel-ggplot-figs.Rmd</code></div>
@@ -102,15 +102,13 @@
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>This vignette is Part 2 of 3 for an R workshop created for <a href="http://www.biology.ubc.ca/course-listing-2/#500level-4">BIOL 548L</a>, a graduate-level course on data visualization taught at the University of British Columbia.</p>
 <p>When the workshop runs, we split students into three groups with successively increasing levels of difficulty. <strong>To make sense of what follows, we recommend working through (or at least looking at) <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html">Part 1’s vignette</a>.</strong></p>
+<p>The goal of Part 2’s vignette is to learn how to structure data to produce single plots ready for presentations and publications</p>
 <p>Part 3’s vignette (which we recommend going through only <em>after</em> completing this page) can be found <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html">here</a>.</p>
 <p>All code and contents of this vignette were written together by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan.</p>
 </div>
-<div id="group-2-learn-how-to-structure-data-to-produce-single-plots-that-are-ready-for-presentations-and-publications" class="section level2">
+<div id="learning-objectives" class="section level2">
 <h2 class="hasAnchor">
-<a href="#group-2-learn-how-to-structure-data-to-produce-single-plots-that-are-ready-for-presentations-and-publications" class="anchor"></a>Group 2: Learn how to structure data to produce single plots that are ready for presentations and publications</h2>
-<div id="learning-objectives" class="section level3">
-<h3 class="hasAnchor">
-<a href="#learning-objectives" class="anchor"></a>Learning Objectives:</h3>
+<a href="#learning-objectives" class="anchor"></a>Learning Objectives:</h2>
 <ol style="list-style-type: decimal">
 <li>Articulate the advantages of literate programming</li>
 <li>Employ piping to restructure data for tidyverse</li>
@@ -118,9 +116,9 @@
 <li>Manipulate plots to improve clarity and maximize the data : ink ratio</li>
 </ol>
 </div>
-<div id="load-or-installload-packages" class="section level3">
-<h3 class="hasAnchor">
-<a href="#load-or-installload-packages" class="anchor"></a>Load or install&amp;load packages</h3>
+<div id="load-or-installload-packages" class="section level2">
+<h2 class="hasAnchor">
+<a href="#load-or-installload-packages" class="anchor"></a>Load or install&amp;load packages</h2>
 <p>We’ll first load packages that will be necessary. The <code>package.check()</code> function below is designed to first see if each package is already installed. If any aren’t, the function then installs them from CRAN. Then all the packages are loaded.</p>
 <p>The code block is modified from <a href="https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/">this blog post</a></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#library(ubcBIOL548L)</span></a>
@@ -159,18 +157,18 @@
 <a class="sourceLine" id="cb1-34" data-line-number="34">  }</a>
 <a class="sourceLine" id="cb1-35" data-line-number="35">)</a></code></pre></div>
 </div>
-<div id="what-is-literate-programming" class="section level3">
-<h3 class="hasAnchor">
-<a href="#what-is-literate-programming" class="anchor"></a>What is literate programming?</h3>
+<div id="what-is-literate-programming" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-is-literate-programming" class="anchor"></a>What is literate programming?</h2>
 <p>Literate programming is a coding paradigm that rethinks the “grammar” of traditional code to more closely resemble writing in a human language, like English.</p>
 <p>The primary goal of literate programming is to move away from coding “for computers” (ie, code that simplifies compilation) and instead to write in a way that more resembles how we think.</p>
 <p>In addition to making for much more readable code even with fewer comments, a good literate coding language should make it easier for you to translate ideas into code.</p>
 <p>In the tidyverse, we will largely use the analogy of variables as nouns and functions as verbs that operate on the nouns.</p>
 <p>The main way we will make our code literate however is with the pipe: %&gt;%</p>
 </div>
-<div id="what-is-a-pipe" class="section level3">
-<h3 class="hasAnchor">
-<a href="#what-is-a-pipe" class="anchor"></a>What is a pipe?</h3>
+<div id="what-is-a-pipe" class="section level2">
+<h2 class="hasAnchor">
+<a href="#what-is-a-pipe" class="anchor"></a>What is a pipe?</h2>
 <p>A pipe, or %&gt;% , is an operator that takes everything on the left and plugs it into the function on the right.</p>
 <p>In short: x %&gt;% f(y) is equivalent to f(x, y)</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># So:</span></a>
@@ -209,9 +207,9 @@
 <a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt; # … with 386 more rows</span></a></code></pre></div>
 <p>In RStudio you can use the shortcut CTRL/CMD + SHIFT + M to insert a pipe</p>
 </div>
-<div id="why-bother-with-pipes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#why-bother-with-pipes" class="anchor"></a>Why bother with pipes?</h3>
+<div id="why-bother-with-pipes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#why-bother-with-pipes" class="anchor"></a>Why bother with pipes?</h2>
 <p>To see how pipes can make code more readable, let’s translate this simple cake recipe into pseudo R code:</p>
 <ol style="list-style-type: decimal">
 <li>Cream together sugar and butter</li>
@@ -258,9 +256,9 @@ If we don’t want to save intermediates, we can just do all the steps in one li
 <a class="sourceLine" id="cb6-14" data-line-number="14">  )  </a></code></pre></div>
 <p>It’s pretty clear why this is no good</p>
 </div>
-<div id="piping" class="section level3">
-<h3 class="hasAnchor">
-<a href="#piping" class="anchor"></a>Piping</h3>
+<div id="piping" class="section level2">
+<h2 class="hasAnchor">
+<a href="#piping" class="anchor"></a>Piping</h2>
 <p><strong>Now for the piping approach:</strong></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">cake &lt;-<span class="st">  </span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="st">    </span><span class="kw">cream</span>(sugar, butter) <span class="op">%&gt;%</span><span class="st">  </span></a>
@@ -278,9 +276,9 @@ If we don’t want to save intermediates, we can just do all the steps in one li
 <p><a href="%22https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf%22">Data import + restructuring</a></p>
 <p><a href="%22https://www.rstudio.com/resources/cheatsheets/%22">Other cheat sheets</a></p>
 </div>
-<div id="some-prep-work-for-the-coding-part-of-the-lesson" class="section level3">
-<h3 class="hasAnchor">
-<a href="#some-prep-work-for-the-coding-part-of-the-lesson" class="anchor"></a>Some prep work for the coding part of the lesson:</h3>
+<div id="some-prep-work-for-the-coding-part-of-the-lesson" class="section level2">
+<h2 class="hasAnchor">
+<a href="#some-prep-work-for-the-coding-part-of-the-lesson" class="anchor"></a>Some prep work for the coding part of the lesson:</h2>
 <p>In this section our main goal will be to reproduce as closely as possible all the individual plots that make up Figure 3 in the <a href="https://www.cell.com/current-biology/fulltext/S0960-9822(16)31394-X">Gaede et al. 2017 paper</a>.</p>
 <p>The one exception to that will be the legends and icons, which are easier to align and arrange when organizing the plots into a single multipanel figure, which is left for Group 3.</p>
 <p>Let’s start by opening up the paper and setting up some variables we will be using throughout the plotting.</p>
@@ -289,34 +287,10 @@ If we don’t want to save intermediates, we can just do all the steps in one li
 <a class="sourceLine" id="cb8-2" data-line-number="2">col_zb &lt;-<span class="st"> "#F48D00"</span></a>
 <a class="sourceLine" id="cb8-3" data-line-number="3">col_pg &lt;-<span class="st"> "#4AA4F2"</span></a></code></pre></div>
 </div>
-<div id="fig-3-panel-d" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig-3-panel-d" class="anchor"></a>Fig 3 Panel D:</h3>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">data_D &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">"Fig3D_data.csv"</span>)</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; Parsed with column specification:</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; cols(</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt;   species = col_character(),</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt;   perc_firing = col_double(),</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt;   num_bins = col_double()</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; )</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co"># Visualize data</span></a>
-<a class="sourceLine" id="cb9-10" data-line-number="10">data_D</a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt; # A tibble: 2,400 x 3</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;    species perc_firing num_bins</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;  1 calan          0.5         4</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;  2 calan          0.55        4</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;  3 calan          0.6         4</span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;  4 calan          0.65        4</span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;  5 calan          0.7         3</span></a>
-<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt;  6 calan          0.75        3</span></a>
-<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt;  7 calan          0.8         1</span></a>
-<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt;  8 calan          0.85        1</span></a>
-<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt;  9 calan          0.9         1</span></a>
-<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt; 10 calan          0.95        1</span></a>
-<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt; # … with 2,390 more rows</span></a></code></pre></div>
-<p><strong>Anatomy of a ggplot</strong><br><code>ggplot</code> is built around the idea of a “Grammar of Graphics” – a way of describing (almost) any graphic.</p>
+<div id="anatomy-of-a-ggplot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#anatomy-of-a-ggplot" class="anchor"></a>Anatomy of a ggplot</h2>
+<p><code>ggplot</code> is built around the idea of a “Grammar of Graphics” – a way of describing (almost) any graphic.</p>
 <p>There are three key components to any graphic under the Grammar of Graphics:</p>
 <ul>
 <li>Data: the information to be conveyed</li>
@@ -324,12 +298,12 @@ If we don’t want to save intermediates, we can just do all the steps in one li
 <li>Aesthetic mapping: the connection between relevant parts of the data and the aesthetics (size, colour, position, etc…) of the geometries</li>
 </ul>
 <p>Any ggplot you make will at the very minimum require these three things and will usually look something like this:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> my_data, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> var1, <span class="dt">y =</span> var2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> my_data, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> var1, <span class="dt">y =</span> var2)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p>Or, equivalently:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">my_data <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> var1, <span class="dt">y =</span> var2)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">my_data <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> var1, <span class="dt">y =</span> var2)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p>But how do you know what geometries are available or what aesthetic mappings you can use for each?<br>
 Use the <a href="%22https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf%22">plotting with ggplot2 cheat sheet</a></p>
 <p>Other possibly relevant componenets include:</p>
@@ -338,6 +312,34 @@ Use the <a href="%22https://github.com/rstudio/cheatsheets/raw/master/data-visua
 <li>Scales (eg mapping specifc colours to groups)</li>
 <li>Facets (subpanels of similar plots)</li>
 </ul>
+</div>
+<div id="build-a-boxplot-with-data-superimposed-figure-3-panel-d" class="section level2">
+<h2 class="hasAnchor">
+<a href="#build-a-boxplot-with-data-superimposed-figure-3-panel-d" class="anchor"></a>Build a boxplot with data superimposed (Figure 3 Panel D):</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">data_D &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">"Fig3D_data.csv"</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; Parsed with column specification:</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; cols(</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt;   species = col_character(),</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt;   perc_firing = col_double(),</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt;   num_bins = col_double()</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; )</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co"># Visualize data</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10">data_D</a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; # A tibble: 2,400 x 3</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt;    species perc_firing num_bins</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt;    &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt;  1 calan          0.5         4</span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt;  2 calan          0.55        4</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt;  3 calan          0.6         4</span></a>
+<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt;  4 calan          0.65        4</span></a>
+<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt;  5 calan          0.7         3</span></a>
+<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt;  6 calan          0.75        3</span></a>
+<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt;  7 calan          0.8         1</span></a>
+<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt;  8 calan          0.85        1</span></a>
+<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt;  9 calan          0.9         1</span></a>
+<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; 10 calan          0.95        1</span></a>
+<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; # … with 2,390 more rows</span></a></code></pre></div>
 <p><strong>Let’s make a ggplot!</strong></p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">data_D <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> perc_firing, <span class="dt">y =</span> num_bins, <span class="dt">colour =</span> species))</a></code></pre></div>
@@ -499,9 +501,9 @@ Use the <a href="%22https://github.com/rstudio/cheatsheets/raw/master/data-visua
 <a class="sourceLine" id="cb27-17" data-line-number="17">fig_D</a></code></pre></div>
 <p><img src="group-02_Piping-single-panel-ggplot-figs_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
 </div>
-<div id="fig-3-panel-e" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig-3-panel-e" class="anchor"></a>Fig 3 Panel E:</h3>
+<div id="build-a-grouped-barplot-figure-3-panel-e" class="section level2">
+<h2 class="hasAnchor">
+<a href="#build-a-grouped-barplot-figure-3-panel-e" class="anchor"></a>Build a grouped barplot (Figure 3 Panel E):</h2>
 <p><strong>Visualize the data:</strong></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">read_csv</span>(<span class="st">"./Fig3E_data.csv"</span>)</a>
 <a class="sourceLine" id="cb28-2" data-line-number="2"><span class="co">#&gt; Parsed with column specification:</span></a>
@@ -710,9 +712,9 @@ Use the <a href="%22https://github.com/rstudio/cheatsheets/raw/master/data-visua
 <a class="sourceLine" id="cb36-25" data-line-number="25">fig_E</a></code></pre></div>
 <p><img src="group-02_Piping-single-panel-ggplot-figs_files/figure-html/unnamed-chunk-34-1.png" width="700"></p>
 </div>
-<div id="fig-3-panel-b" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig-3-panel-b" class="anchor"></a>Fig 3 Panel B:</h3>
+<div id="build-a-line-plot-with-error-bars-and-other-graphical-features-figure-3-panel-b" class="section level2">
+<h2 class="hasAnchor">
+<a href="#build-a-line-plot-with-error-bars-and-other-graphical-features-figure-3-panel-b" class="anchor"></a>Build a line plot with error bars and other graphical features (Figure 3 Panel B):</h2>
 <p><strong>Visualize data:</strong></p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">read_csv</span>(<span class="st">"Fig3B_data.csv"</span>)</a>
 <a class="sourceLine" id="cb37-2" data-line-number="2"><span class="co">#&gt; Parsed with column specification:</span></a>
@@ -1171,9 +1173,9 @@ To fudge the lines, let’s make another dataset:</p>
 <a class="sourceLine" id="cb51-47" data-line-number="47">fig_B</a></code></pre></div>
 <p><img src="group-02_Piping-single-panel-ggplot-figs_files/figure-html/unnamed-chunk-49-1.png" width="700"></p>
 </div>
-<div id="fig-3-panel-f" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig-3-panel-f" class="anchor"></a>Fig 3 Panel F:</h3>
+<div id="build-another-grouped-barplot-figure-3-panel-f" class="section level2">
+<h2 class="hasAnchor">
+<a href="#build-another-grouped-barplot-figure-3-panel-f" class="anchor"></a>Build another grouped barplot (Figure 3 Panel F):</h2>
 <p><strong>Visualize data:</strong></p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="kw">read_csv</span>(<span class="st">"./Fig3F_data.csv"</span>)</a>
 <a class="sourceLine" id="cb52-2" data-line-number="2"><span class="co">#&gt; Parsed with column specification:</span></a>
@@ -1414,9 +1416,9 @@ To fudge the lines, let’s make another dataset:</p>
 <a class="sourceLine" id="cb59-25" data-line-number="25">fig_F</a></code></pre></div>
 <p><img src="group-02_Piping-single-panel-ggplot-figs_files/figure-html/unnamed-chunk-57-1.png" width="700"></p>
 </div>
-<div id="fig-3-panel-c" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig-3-panel-c" class="anchor"></a>Fig 3 Panel C:</h3>
+<div id="build-another-line-plot-figure-3-panel-c" class="section level2">
+<h2 class="hasAnchor">
+<a href="#build-another-line-plot-figure-3-panel-c" class="anchor"></a>Build another line plot (Figure 3 Panel C):</h2>
 <p><strong>Reorganize raw data:</strong></p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">data_C_raw &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">"Fig3C_data.csv"</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb60-2" data-line-number="2"><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> bin, <span class="dt">value =</span> count, <span class="kw">starts_with</span>(<span class="st">"bin"</span>)) <span class="op">%&gt;%</span></a>
@@ -1523,7 +1525,6 @@ To fudge the lines, let’s make another dataset:</p>
 <a class="sourceLine" id="cb63-39" data-line-number="39">fig_C</a></code></pre></div>
 <p><img src="group-02_Piping-single-panel-ggplot-figs_files/figure-html/unnamed-chunk-61-1.png" width="700"></p>
 </div>
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -1533,7 +1534,19 @@ To fudge the lines, let’s make another dataset:</p>
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#group-2-learn-how-to-structure-data-to-produce-single-plots-that-are-ready-for-presentations-and-publications">Group 2: Learn how to structure data to produce single plots that are ready for presentations and publications</a></li>
+      <li><a href="#learning-objectives">Learning Objectives:</a></li>
+      <li><a href="#load-or-installload-packages">Load or install&amp;load packages</a></li>
+      <li><a href="#what-is-literate-programming">What is literate programming?</a></li>
+      <li><a href="#what-is-a-pipe">What is a pipe?</a></li>
+      <li><a href="#why-bother-with-pipes">Why bother with pipes?</a></li>
+      <li><a href="#piping">Piping</a></li>
+      <li><a href="#some-prep-work-for-the-coding-part-of-the-lesson">Some prep work for the coding part of the lesson:</a></li>
+      <li><a href="#anatomy-of-a-ggplot">Anatomy of a ggplot</a></li>
+      <li><a href="#build-a-boxplot-with-data-superimposed-figure-3-panel-d">Build a boxplot with data superimposed (Figure 3 Panel D):</a></li>
+      <li><a href="#build-a-grouped-barplot-figure-3-panel-e">Build a grouped barplot (Figure 3 Panel E):</a></li>
+      <li><a href="#build-a-line-plot-with-error-bars-and-other-graphical-features-figure-3-panel-b">Build a line plot with error bars and other graphical features (Figure 3 Panel B):</a></li>
+      <li><a href="#build-another-grouped-barplot-figure-3-panel-f">Build another grouped barplot (Figure 3 Panel F):</a></li>
+      <li><a href="#build-another-line-plot-figure-3-panel-c">Build another line plot (Figure 3 Panel C):</a></li>
       </ul>
 </div>
       </div>
