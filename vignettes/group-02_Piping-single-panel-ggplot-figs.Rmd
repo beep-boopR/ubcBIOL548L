@@ -16,28 +16,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-#library(ubcBIOL548L)
-
-library(gapminder)
-library(ggplot2)
-library(tidyr)
-library(dplyr)
-library(tibble)
-library(readr)
-library(forcats)
-library(readxl)
-
-library(ggthemes)
-library(magick)
-library(grid)
-library(cowplot)
-
-library(ggmap)
-library(maps)
-
-```
-
 ```{r, include = FALSE}
 
   file.copy(system.file("extdata", "gapminder.csv",
@@ -93,8 +71,55 @@ Baliga, Andrea Gaede and Shreeram Senthivasan.
 3. Describe the grammar of graphics that underlies plotting in ggplot
 4. Manipulate plots to improve clarity and maximize the data : ink ratio
 
-### Lesson:  
-#### What is literate programming?
+### Load or install&load packages
+
+We'll first load packages that will be necessary. The `package.check()` function
+below is designed to first see if each package is already installed. If any 
+aren't, the function then installs them from CRAN. Then all the packages are 
+loaded.
+
+The code block is modified from 
+[this blog post](https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/) 
+
+```{r package_loading, message=FALSE, warning=FALSE}
+#library(ubcBIOL548L)
+
+## Modified from: 
+## https://vbaliga.github.io/verify-that-r-packages-are-installed-and-loaded/
+
+## First specify the packages of interest
+packages <-
+  c("gapminder",
+    "ggplot2",
+    "tidyr",
+    "dplyr",
+    "tibble",
+    "readr",
+    "forcats",
+    "readxl",
+    "ggthemes",
+    "magick",
+    "grid",
+    "cowplot",
+    # ggmap and maps are optional; needed for creating maps
+    "ggmap",
+    "maps")
+## Now load or install&load all packages
+package.check <- lapply(
+  packages,
+  FUN = function(x)
+  {
+    if (!require(x, character.only = TRUE))
+    {
+      install.packages(x, dependencies = TRUE,
+                       repos = "http://cran.us.r-project.org")
+      library(x, character.only = TRUE)
+    }
+  }
+)
+```
+
+### What is literate programming?
 
 Literate programming is a coding paradigm that rethinks the "grammar" of traditional code to more closely resemble writing in a human language, like English.  
 
@@ -106,7 +131,7 @@ In the tidyverse, we will largely use the analogy of variables as nouns and func
 
 The main way we will make our code literate however is with the pipe: %>%  
 
-#### What is a pipe? 
+### What is a pipe? 
 A pipe, or %>% , is an operator that takes everything on the left and plugs it into the function on the right.  
 
 In short: x %>% f(y)  is equivalent to  f(x, y)  
@@ -121,7 +146,7 @@ gapminder %>%
 ```
 In RStudio you can use the shortcut CTRL/CMD + SHIFT + M to insert a pipe  
 
-#### Why bother with pipes?  
+### Why bother with pipes?  
 To see how pipes can make code more readable, let's translate this simple cake recipe into pseudo R code:
 
 1. Cream together sugar and butter
@@ -179,7 +204,7 @@ frost(
 ```
 It's pretty clear why this is no good  
 
-#### Piping
+### Piping
 
 **Now for the piping approach:**  
 ```{r, eval=FALSE}
@@ -207,7 +232,7 @@ The RStudio cheat sheets are a whole lot more useful once you start piping -- he
 
 [Other cheat sheets]("https://www.rstudio.com/resources/cheatsheets/")
 
-#### Some prep work for the coding part of the lesson:
+### Some prep work for the coding part of the lesson:
 In this section our main goal will be to reproduce as closely as possible all the individual plots that make up Figure 3 in the [Gaede et al. 2017 paper](https://www.cell.com/current-biology/fulltext/S0960-9822(16)31394-X).  
 
 The one exception to that will be the legends and icons, which are easier to align and arrange when organizing the plots into a single multipanel figure, which is left for Group 3.  
@@ -221,7 +246,7 @@ col_zb <- "#F48D00"
 col_pg <- "#4AA4F2"
 ```
 
-#### Fig 3 Panel D: 
+### Fig 3 Panel D: 
 ```{r}
 data_D <- read_csv("Fig3D_data.csv")
 
@@ -447,7 +472,7 @@ fig_D <- data_D %>%
 fig_D
 ```
 
-#### Fig 3 Panel E:
+### Fig 3 Panel E:
 **Visualize the data:**
 ```{r}
 read_csv("./Fig3E_data.csv")
@@ -552,7 +577,7 @@ fig_E <- data_E %>%
 fig_E
 ```
 
-#### Fig 3 Panel B:
+### Fig 3 Panel B:
 **Visualize data:**
 ```{r}
 read_csv("Fig3B_data.csv")
@@ -862,7 +887,7 @@ fig_B
 ```
 
 
-#### Fig 3 Panel F:
+### Fig 3 Panel F:
 **Visualize data:**
 ```{r}
 read_csv("./Fig3F_data.csv")
@@ -981,7 +1006,7 @@ fig_F <- data_F %>%
 fig_F
 ```
 
-#### Fig 3 Panel C:
+### Fig 3 Panel C:
 **Reorganize raw data:**
 ```{r}
 data_C_raw <- read_csv("Fig3C_data.csv") %>%
