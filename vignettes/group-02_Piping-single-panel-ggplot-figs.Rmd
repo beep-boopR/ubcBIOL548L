@@ -53,13 +53,13 @@ Columbia.
 When the workshop runs, we split students into three groups with successively
 increasing levels of difficulty. **To make sense of what follows, we recommend 
 working through (or at least looking at) 
-[Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html).** 
+[Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01_Fundamentals-data-wrangling-tidyverse.html).** 
  
 The goal of Part 2's vignette is to learn how to structure data to produce single plots ready for presentations and publications
 
 Part 3's vignette (which we recommend going through only *after* completing this
 page) can be found 
-[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
+[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03_Using-cowplot-multi-panel.html).
 
 All code and contents of this vignette were written together by Vikram B. 
 Baliga, Andrea Gaede and Shreeram Senthivasan.  

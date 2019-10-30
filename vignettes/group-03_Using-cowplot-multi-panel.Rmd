@@ -65,9 +65,9 @@ Columbia.
 When the workshop runs, we split students into three groups with successively
 increasing levels of difficulty. **To make sense of what follows, we recommend 
 working through (or at least looking at) 
-[Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html) 
+[Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01_Fundamentals-data-wrangling-tidyverse.html) 
 and 
-[Part 2's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html)
+[Part 2's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02_Piping-single-panel-ggplot-figs.html)
 .**
 
 All code and contents of this vignette were written together by Vikram B. 

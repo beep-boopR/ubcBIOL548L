@@ -38,9 +38,9 @@ Columbia.
 When the workshop runs, we split students into three groups with successively
 increasing levels of difficulty. We recommend everyone starts here and works 
 through the code that follows. This vignette shows users how to load a clean data file into R and make boxplots and scatterplots. Once you are comfortable with the contents of this page, please feel free to move on to
-[Part 2](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html) and
+[Part 2](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02_Piping-single-panel-ggplot-figs.html) and
 ultimately to Part 3 (which we recommend going through only *after* completing 
-Part 2) [here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
+Part 2) [here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03_Using-cowplot-multi-panel.html).
 
 All code and contents of this vignette were written together by Vikram B. 
 Baliga, Andrea Gaede and Shreeram Senthivasan.  
@@ -251,3 +251,5 @@ qplot(x = continent,
       data = my_data,
       geom = 'boxplot')
 ```
+
+### Congratulations! You finished part 1!! Now check out [part 2](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02_Piping-single-panel-ggplot-figs.html)

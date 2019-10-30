@@ -88,7 +88,7 @@
       <h1>Part 1: Fundamentals of data import, structuring, and plotting in tidyverse</h1>
                         <h4 class="author">by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
             
-            <h4 class="date">Last updated on 2019-10-30 14:45:34</h4>
+            <h4 class="date">Last updated on 2019-10-30 15:17:14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/beep-boopR/ubcBIOL548L/blob/master/vignettes/group-01_Fundamentals-data-wrangling-tidyverse.Rmd"><code>vignettes/group-01_Fundamentals-data-wrangling-tidyverse.Rmd</code></a></small>
       <div class="hidden name"><code>group-01_Fundamentals-data-wrangling-tidyverse.Rmd</code></div>
@@ -97,36 +97,16 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ubcBIOL548L)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gapminder)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;     filter, lag</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tibble)</a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(readr)</a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(readxl)</a></code></pre></div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>This vignette is Part 1 of 3 for an R workshop created for <a href="http://www.biology.ubc.ca/course-listing-2/#500level-4">BIOL 548L</a>, a graduate-level course on data visualization taught at the University of British Columbia.</p>
-<p>When the workshop runs, we split students into three groups with successively increasing levels of difficulty. We recommend everyone starts here and works through the code that follows. Once you are comfortable with the contents of this page, please feel free to move on to <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html">Part 2</a> and ultimately to Part 3 (which we recommend going through only <em>after</em> completing Part 2) <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html">here</a>.</p>
+<p>When the workshop runs, we split students into three groups with successively increasing levels of difficulty. We recommend everyone starts here and works through the code that follows. This vignette shows users how to load a clean data file into R and make boxplots and scatterplots. Once you are comfortable with the contents of this page, please feel free to move on to <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-02_Piping-single-panel-ggplot-figs.html">Part 2</a> and ultimately to Part 3 (which we recommend going through only <em>after</em> completing Part 2) <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-03_Using-cowplot-multi-panel.html">here</a>.</p>
 <p>All code and contents of this vignette were written together by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan.</p>
 </div>
-<div id="group-1-load-a-clean-data-file-into-r-and-make-boxplots-and-scatterplots" class="section level2">
+<div id="learning-objectives" class="section level2">
 <h2 class="hasAnchor">
-<a href="#group-1-load-a-clean-data-file-into-r-and-make-boxplots-and-scatterplots" class="anchor"></a>Group 1: Load a clean data file into R and make boxplots and scatterplots</h2>
-<div id="learning-objectives" class="section level3">
-<h3 class="hasAnchor">
-<a href="#learning-objectives" class="anchor"></a>Learning Objectives:</h3>
+<a href="#learning-objectives" class="anchor"></a>Learning Objectives:</h2>
 <ol style="list-style-type: decimal">
 <li>Determine how to import and control data stored in different filetypes</li>
 <li>Understand the best practices for structuring data in <em>tidyverse/ggplot</em>
@@ -135,12 +115,30 @@
 </li>
 </ol>
 </div>
-<div id="lesson" class="section level3">
-<h3 class="hasAnchor">
-<a href="#lesson" class="anchor"></a>Lesson:</h3>
-<div id="importing-data" class="section level4">
-<h4 class="hasAnchor">
-<a href="#importing-data" class="anchor"></a>Importing data:</h4>
+<div id="load-or-install-load-necessary-packages" class="section level2">
+<h2 class="hasAnchor">
+<a href="#load-or-install-load-necessary-packages" class="anchor"></a>Load or install &amp; load necessary packages</h2>
+<p>Before running the code below, make sure you have the necessary packages loaded. If you do not have the packages listed below installed on your computer, then download them from the CRAN site using <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> and then load them with <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> as shown below.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ubcBIOL548L)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gapminder)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; Attaching package: 'dplyr'</span></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; The following objects are masked from 'package:stats':</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;     filter, lag</span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; The following objects are masked from 'package:base':</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt;     intersect, setdiff, setequal, union</span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tibble)</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(readr)</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(readxl)</a></code></pre></div>
+</div>
+<div id="importing-and-peeking-at-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#importing-and-peeking-at-data" class="anchor"></a>Importing and peeking at data:</h2>
 <p><strong>Import data using base R command, and give it the name <code>my_data</code></strong></p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">my_data &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"gapminder.csv"</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co"># In practise, read_csv() is often better</span></a></code></pre></div>
@@ -361,10 +359,9 @@
 <a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; 10 Afghanistan Asia       1997    41.8 22227415      635.</span></a>
 <a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; # … with 1,694 more rows</span></a></code></pre></div>
 </div>
-<div id="plotting" class="section level4">
-<h4 class="hasAnchor">
-<a href="#plotting" class="anchor"></a>Plotting:</h4>
-<p><strong>Make a histogram</strong></p>
+<div id="using-qplot-to-make-a-histogram-scatter-plot-or-dot-plot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#using-qplot-to-make-a-histogram-scatter-plot-or-dot-plot" class="anchor"></a>Using qplot to make a histogram, scatter plot, or dot plot</h2>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># This command makes a histogram of the `lifeExp` column of the `my_data` dataset</span></a>
 <a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">x =</span> lifeExp, <span class="dt">data =</span> my_data)</a>
 <a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></a></code></pre></div>
@@ -387,6 +384,10 @@ One of the hidden arguments is <code>geom</code> which specifies the type of plo
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># Note that we are now specifying boxplot instead of point plot</span></a>
 <a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">x =</span> continent, <span class="dt">y =</span> lifeExp, <span class="dt">data =</span> my_data, <span class="dt">geom =</span> <span class="st">'boxplot'</span>)</a></code></pre></div>
 <p><img src="group-01_Fundamentals-data-wrangling-tidyverse_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
+</div>
+<div id="how-to-quickly-make-plots-with-qplot-that-are-easy-to-interpret" class="section level2">
+<h2 class="hasAnchor">
+<a href="#how-to-quickly-make-plots-with-qplot-that-are-easy-to-interpret" class="anchor"></a>How to quickly make plots with <code>qplot()</code> that are easy to interpret</h2>
 <p><strong>Now let’s change the number of bins in a histogram and make the plot prettier</strong></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># The hidden argument `bins` has a default valute of 30</span></a>
 <a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">x =</span> lifeExp, <span class="dt">data =</span> my_data, <span class="dt">geom =</span> <span class="st">'histogram'</span>)</a>
@@ -417,6 +418,10 @@ One of the hidden arguments is <code>geom</code> which specifies the type of plo
 <a class="sourceLine" id="cb24-8" data-line-number="8">      <span class="dt">data =</span> my_data,</a>
 <a class="sourceLine" id="cb24-9" data-line-number="9">      <span class="dt">geom =</span> <span class="st">'histogram'</span>)</a></code></pre></div>
 <p><img src="group-01_Fundamentals-data-wrangling-tidyverse_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
+</div>
+<div id="log-scale-trendline" class="section level2">
+<h2 class="hasAnchor">
+<a href="#log-scale-trendline" class="anchor"></a>Log scale &amp; trendline</h2>
 <p><strong>Let’s apply a log scale and add a trendline to a scatter plot</strong></p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># Note that x axis is compressed</span></a>
 <a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">x =</span> gdpPercap, <span class="dt">y =</span> lifeExp, <span class="dt">data =</span> my_data, <span class="dt">geom =</span> <span class="st">'point'</span>)</a></code></pre></div>
@@ -445,7 +450,10 @@ One of the hidden arguments is <code>geom</code> which specifies the type of plo
 <a class="sourceLine" id="cb27-15" data-line-number="15">      <span class="co"># to the `geom` argument</span></a>
 <a class="sourceLine" id="cb27-16" data-line-number="16">      <span class="dt">geom =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'point'</span>,<span class="st">'smooth'</span>))</a></code></pre></div>
 <p><img src="group-01_Fundamentals-data-wrangling-tidyverse_files/figure-html/unnamed-chunk-25-3.png" width="700"></p>
-<p><strong>Finally let’s make a boxplot</strong></p>
+</div>
+<div id="building-a-boxplot-using-gapminder-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#building-a-boxplot-using-gapminder-data" class="anchor"></a>Building a boxplot using gapminder data</h2>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/qplot.html">qplot</a></span>(<span class="dt">x =</span> continent,</a>
 <a class="sourceLine" id="cb28-2" data-line-number="2">      <span class="dt">y =</span> lifeExp,</a>
 <a class="sourceLine" id="cb28-3" data-line-number="3">      <span class="dt">main =</span> <span class="st">"Boxplot of life expectancy by continent"</span>,</a>
@@ -454,7 +462,10 @@ One of the hidden arguments is <code>geom</code> which specifies the type of plo
 <a class="sourceLine" id="cb28-6" data-line-number="6">      <span class="dt">data =</span> my_data,</a>
 <a class="sourceLine" id="cb28-7" data-line-number="7">      <span class="dt">geom =</span> <span class="st">'boxplot'</span>)</a></code></pre></div>
 <p><img src="group-01_Fundamentals-data-wrangling-tidyverse_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
-</div>
+<div id="congratulations-you-finished-part-1-now-check-out-part-2" class="section level3">
+<h3 class="hasAnchor">
+<a href="#congratulations-you-finished-part-1-now-check-out-part-2" class="anchor"></a>Congratulations! You finished part 1!! Now check out <a href="https://beep-boopr.github.io/ubcBIOL548L/articles/group-02_Piping-single-panel-ggplot-figs.html">part 2</a>
+</h3>
 </div>
 </div>
   </div>
@@ -466,7 +477,13 @@ One of the hidden arguments is <code>geom</code> which specifies the type of plo
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#introduction">Introduction</a></li>
-      <li><a href="#group-1-load-a-clean-data-file-into-r-and-make-boxplots-and-scatterplots">Group 1: Load a clean data file into R and make boxplots and scatterplots</a></li>
+      <li><a href="#learning-objectives">Learning Objectives:</a></li>
+      <li><a href="#load-or-install-load-necessary-packages">Load or install &amp; load necessary packages</a></li>
+      <li><a href="#importing-and-peeking-at-data">Importing and peeking at data:</a></li>
+      <li><a href="#using-qplot-to-make-a-histogram-scatter-plot-or-dot-plot">Using qplot to make a histogram, scatter plot, or dot plot</a></li>
+      <li><a href="#how-to-quickly-make-plots-with-qplot-that-are-easy-to-interpret">How to quickly make plots with <code>qplot()</code> that are easy to interpret</a></li>
+      <li><a href="#log-scale-trendline">Log scale &amp; trendline</a></li>
+      <li><a href="#building-a-boxplot-using-gapminder-data">Building a boxplot using gapminder data</a></li>
       </ul>
 </div>
       </div>
