@@ -44,9 +44,21 @@ library(readxl)
 
 ## Introduction
 
-This is an R workshop created for a graduate data visualization course at the University of British Columbia by Vikram Baliga, Andrea Gaede and Shreeram Senthivasan.  
+This vignette is Part 1 of 3 for an R workshop created for 
+[BIOL 548L](http://www.biology.ubc.ca/course-listing-2/#500level-4), a 
+graduate-level course on data visualization taught at the University of British 
+Columbia. 
 
-There are three groups with increasing levels of difficulty. Each group has a set of learning objectives.
+When the workshop runs, we split students into three groups with successively
+increasing levels of difficulty. We recommend everyone starts here and works 
+through the code that follows. Once you are comfortable with the contents of 
+this page, please feel free to move on to
+[Part 2](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html) and
+ultimately to Part 3 (which we recommend going through only *after* completing 
+Part 2) [here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
+
+All code and contents of this vignette were written together by Vikram B. 
+Baliga, Andrea Gaede and Shreeram Senthivasan.  
 
 ## Group 1: Load a clean data file into R and make boxplots and scatterplots
 
