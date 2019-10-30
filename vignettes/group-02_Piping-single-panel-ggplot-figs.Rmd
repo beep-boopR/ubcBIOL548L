@@ -68,9 +68,22 @@ library(maps)
 ```
 ## Introduction
 
-This is an R workshop created for a graduate data visualization course at the University of British Columbia by Vikram Baliga, Andrea Gaede and Shreeram Senthivasan.  
+This vignette is Part 2 of 3 for an R workshop created for 
+[BIOL 548L](http://www.biology.ubc.ca/course-listing-2/#500level-4), a 
+graduate-level course on data visualization taught at the University of British 
+Columbia. 
 
-There are three groups with increasing levels of difficulty. Each group has a set of learning opjectives.
+When the workshop runs, we split students into three groups with successively
+increasing levels of difficulty. **To make sense of what follows, we recommend 
+working through (or at least looking at) 
+[Part 1's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-01.html).** 
+ 
+Part 3's vignette (which we recommend going through only *after* completing this
+page) can be found 
+[here](https://beep-boopr.github.io/ubcBIOL548L/articles/group-03.html).
+
+All code and contents of this vignette were written together by Vikram B. 
+Baliga, Andrea Gaede and Shreeram Senthivasan.  
 
 ## Group 2: Learn how to structure data to produce single plots that are ready for presentations and publications
 
