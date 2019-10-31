@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Part 3: Using cowplot to construct multi-panel figures entirely via code • ubcBIOL548L</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/all.min.css" integrity="sha256-PbSmjxuVAzJ6FPvNYsrXygfGhNJYyZ2GktDbkMBqQZg=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.1/css/v4-shims.min.css" integrity="sha256-A6jcAdwFD48VMjlI3GDxUd+eCQa7/KWy6G9oe/ovaPA=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Part 3: Using cowplot to construct multi-panel figures entirely via code">
 <meta property="og:description" content="">
@@ -88,7 +88,7 @@
       <h1>Part 3: Using cowplot to construct multi-panel figures entirely via code</h1>
                         <h4 class="author">by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
             
-            <h4 class="date">Last updated on 2019-10-30 16:25:15</h4>
+            <h4 class="date">Last updated on 2019-10-31 14:14:41</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/beep-boopR/ubcBIOL548L/blob/master/vignettes/group-03_Using-cowplot-multi-panel.Rmd"><code>vignettes/group-03_Using-cowplot-multi-panel.Rmd</code></a></small>
       <div class="hidden name"><code>group-03_Using-cowplot-multi-panel.Rmd</code></div>
@@ -111,7 +111,7 @@
 <p>We will use Figure 3 from Gaede et al. 2017 <a href="http://dx.doi.org/10.1016/j.cub.2016.11.041">Current Biology</a> as an example. Although the original version of this figure was made via creating individual plots in R and then stitching them together in Adobe Illustrator, in this vignette <strong>we’ll provide code that will create the entire figure.</strong></p>
 <p>Here’s the original figure, as seen in the paper:</p>
 <div class="figure">
-<img src="gaedeeatal_fig3.png" alt="Figure 3 from Gaede et al. 2017"><p class="caption">Figure 3 from Gaede et al. 2017</p>
+<img src="gaedeetal_fig3.png" alt="Figure 3 from Gaede et al. 2017"><p class="caption">Figure 3 from Gaede et al. 2017</p>
 </div>
 <p>This study examined how neurons in the lentiformis mesencephali (LM) brain region of three species of birds respond to visual motion across the retina. The species examined were Anna’s hummingbird (<em>Calypte anna</em>), the pigeon (<em>Columba livia</em>), and the zebra finch (<em>Taeniopygia guttata</em>).</p>
 <p>This figure shows that in hummingbirds, these neurons respond to faster visual motion speeds than those in zebra finches or pigeons. A raw trace of neural spikes from a zebra finch is shown in panel A. Panels B, C, and D show how the raw traces can be analyzed to determine the firing rate of neurons, and how these firing rates vary with the speed of the image the bird is seeing. Ultimately, E and F characterize the distribution of firing rates for all three species and show that hummingbirds’ LM neurons respond more to higher visual speeds than the LMs of the other species.</p>
@@ -170,6 +170,11 @@
 <a class="sourceLine" id="cb1-33" title="33">    }</a>
 <a class="sourceLine" id="cb1-34" title="34">  }</a>
 <a class="sourceLine" id="cb1-35" title="35">)</a></code></pre></div>
+</div>
+<div id="data-sets" class="section level3">
+<h3 class="hasAnchor">
+<a href="#data-sets" class="anchor"></a>Data sets</h3>
+<p>You can get all data used in this vignette (and the other two!) by downloading <a href="https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip">this zip file</a>.</p>
 <div id="prep-work-for-figure-legends" class="section level4">
 <h4 class="hasAnchor">
 <a href="#prep-work-for-figure-legends" class="anchor"></a>Prep work for figure legends:</h4>
@@ -430,7 +435,7 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <p><strong>Here’s a quick example:</strong></p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">photo &lt;-<span class="st"> "./photo.jpg"</span></a>
 <a class="sourceLine" id="cb17-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span>()</a>
-<a class="sourceLine" id="cb17-3" title="3"><span class="co">#&gt; [1] "X:/Dropbox/BIOL548L/UBC-BIOL548L/vignettes"</span></a></code></pre></div>
+<a class="sourceLine" id="cb17-3" title="3"><span class="co">#&gt; [1] "C:/Dropbox/BIOL548L/UBC-BIOL548L/vignettes"</span></a></code></pre></div>
 <p><strong>Now create a ggplot object that features only the image.</strong></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">photo_panel &lt;-<span class="st"> </span><span class="kw">ggdraw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">draw_image</span>(photo, <span class="dt">scale =</span> <span class="fl">0.8</span>)</a>
 <a class="sourceLine" id="cb18-2" title="2">photo_panel</a></code></pre></div>

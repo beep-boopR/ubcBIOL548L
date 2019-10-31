@@ -1,6 +1,6 @@
-pandoc: 2.7.2
+pandoc: 2.7.1
 pkgdown: 1.4.1.9000
-pkgdown_sha: 90572181f1ac83b56089ab14c16f4d9e063f216b
+pkgdown_sha: 61c3999702966dd75267b98ce905df22521ebd11
 articles:
   group-01_Fundamentals-data-wrangling-tidyverse: group-01_Fundamentals-data-wrangling-tidyverse.html
   group-02_Piping-single-panel-ggplot-figs: group-02_Piping-single-panel-ggplot-figs.html

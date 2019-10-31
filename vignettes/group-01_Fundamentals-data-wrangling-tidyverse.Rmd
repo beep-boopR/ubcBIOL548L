@@ -67,8 +67,8 @@ library(readxl)
 
 ### Data sets
 
-You can get all data used in this vignette (and the other two!) via 
-downloading [this zip file](https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip).
+You can get all data used in this vignette (and the other two!) by downloading 
+[this zip file](https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip).
 
 
 ## Importing and peeking at data:
