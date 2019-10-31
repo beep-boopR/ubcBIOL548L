@@ -9,4 +9,4 @@ Please see the vignettes in drop-down menu above
 
 
 ## We're going to make this entire figure with code:
-![Figure_3](images/gaedeeatal_fig3.png)
+![Figure_3](images/gaedeetal_fig3.png)
