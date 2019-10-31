@@ -73,6 +73,7 @@ and
 All code and contents of this vignette were written together by Vikram B. 
 Baliga, Andrea Gaede and Shreeram Senthivasan.  
 
+
 ## The endgame: create a multi-panel plot entirely via code
 
 Multi-panel plots can provide an elegant way to tell a visual story that is 
@@ -104,6 +105,7 @@ Ultimately, E and F characterize the distribution of firing rates for all three
 species and show that hummingbirds' LM neurons respond more to higher visual 
 speeds than the LMs of the other species.
 
+
 ## Objectives
 
 The specific learning objectives for this post are:
@@ -113,6 +115,7 @@ The specific learning objectives for this post are:
    [`cowplot`](https://github.com/wilkelab/cowplot)
 3. Evaluate which among a diversity of plotting options most effectively 
    communicates a logical argument
+
 
 ## Package loading and setup 
 
@@ -163,7 +166,6 @@ package.check <- lapply(
   }
 )
 ```
-
 
 ### Data sets
 
@@ -286,7 +288,6 @@ fig_A <-
 fig_A
 ```
 
-
 ### Figure 3 Panel B:
 ```{r panel_B, echo=FALSE, warning=FALSE,message=FALSE}
 ## Build the theme
@@ -380,7 +381,6 @@ fig_B
 ```
 
 ### Figure 3 Panel C:
-
 ```{r panel_C, echo=FALSE, warning=FALSE,message=FALSE}
 data_C_raw <- read_csv("Fig3C_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
@@ -451,7 +451,6 @@ fig_C
 ```
 
 ### Figure 3 Panel D:
-
 ```{r panel_D, echo=FALSE, warning=FALSE,message=FALSE}
 data_D <- read_csv("Fig3D_data.csv") %>%
   mutate(
@@ -566,16 +565,17 @@ fig_F <- data_F %>%
 fig_F
 ```
 
+
 ## A quick intro to cowplot
 
-We'll go over `cowplot::plot_grid()` basics.  
-`draw_image()` & `draw_grob()` can also be used with `ggplot()` & `plot_grid()`
-
-### Basics
+We'll go over `cowplot::plot_grid()` basics:  
 
 * Multiple panels can be combined via `cowplot::plot_grid()`
-* Each panel should be saved as a separate ggplot object beforehand and then 
+* Each panel should be saved as a separate `ggplot` object beforehand and then 
 each will be fed in as an argument to `plot_grid()`
+* Panels can be annotated and labeled
+* `draw_image()` & `draw_grob()` can also be used with `ggplot()` and
+`plot_grid()`
 
 **Plot objects can be added sequentially**
 ```{r add_plots_basic}
@@ -610,7 +610,7 @@ plot_grid(fig_E, fig_F,
           labels = c("E","F"))
 ```
 
-**See the arguments of `cowplot::plot_grid()` to see how labels can be adjusted.**  
+**See the arguments of `cowplot::plot_grid()` to see how labels can be adjusted.**
 We'll adjust the size and (temporarily) change to a serif font.  
 ```{r plot_grid_label_aes}
 plot_grid(fig_E, fig_F,
@@ -620,8 +620,8 @@ plot_grid(fig_E, fig_F,
           label_fontfamily = "serif")
 ```
 
-This looks horrible, but we're using extreme values here to emphasize what can
-be adjusted.
+This looks horrible, but we're using extreme values here to emphasize what is 
+being adjusted.
 
 
 ## Now start assemble sets of panels for each section of Fig 3
@@ -701,6 +701,7 @@ cow_BCD <- plot_grid(cow_BC, cow_D,
 cow_BCD
 ```
 
+
 ## Combine all the sets of panels together
 
 It may help to specify the dimensions of the plot window to ensure that the plot
@@ -718,6 +719,7 @@ cow_A2F <- plot_grid(cow_A, NULL, cow_BCD, cow_EF,
           label_fontfamily = "sans")
 cow_A2F
 ```
+
 
 ## The final step: Add icons to the multi-panel plot
 
@@ -783,7 +785,6 @@ Thanks for reading!
 **For example:**
 `save_plot("Gaedeetal_Fig3.svg", cow_final, base_height = 11, base_width = 8.5)`
 
-
 ### A2: Using photographs with ggplot/cowplot
 
 Often, you may opt to add a photograph as its own panel.
@@ -804,7 +805,6 @@ photo_panel
 ```{r photo_plot}
 plot_grid(fig_F, photo_panel, ncol = 1)
 ```
-
 
 ### A3: Using maps with ggplot/cowplot
 
