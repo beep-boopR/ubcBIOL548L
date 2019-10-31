@@ -118,6 +118,12 @@ package.check <- lapply(
 )
 ```
 
+### Data sets
+
+You can get all data used in this vignette (and the other two!) via 
+downloading [this zip file](https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip).
+
+
 ## What is literate programming?
 
 Literate programming is a coding paradigm that rethinks the "grammar" of traditional code to more closely resemble writing in a human language, like English.  
