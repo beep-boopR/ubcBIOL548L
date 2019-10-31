@@ -38,9 +38,9 @@ knitr::opts_chunk$set(
               package = "ubcBIOL548L"),
             "./Fig3F_data.csv")
 # Images  
-  file.copy(system.file("extdata", "gaedeeatal_fig3.png",
+  file.copy(system.file("extdata", "gaedeetal_fig3.png",
               package = "ubcBIOL548L"),
-            "./gaedeeatal_fig3.png")
+            "./gaedeetal_fig3.png")
   file.copy(system.file("extdata", "hummingbird.png",
               package = "ubcBIOL548L"),
             "./hummingbird.png")
@@ -88,7 +88,7 @@ vignette **we'll provide code that will create the entire figure.**
 
 Here's the original figure, as seen in the paper:
 
-![Figure 3 from Gaede et al. 2017](./gaedeeatal_fig3.png)
+![Figure 3 from Gaede et al. 2017](./gaedeetal_fig3.png)
 
 This study examined how neurons in the lentiformis mesencephali (LM) brain 
 region of three species of birds respond to visual motion across the retina. The
