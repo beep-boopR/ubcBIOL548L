@@ -2,6 +2,10 @@ url: https://beep-boopr.github.io/ubcBIOL548L/
 
 destination: docs
 
+template:
+  params:
+    bootswatch: flatly
+
 authors:
   Vikram B. Baliga:
     href: https://www.vikram-baliga.com/
