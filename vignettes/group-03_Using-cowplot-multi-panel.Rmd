@@ -709,10 +709,13 @@ cow_BCD
 
 It may help to specify the dimensions of the plot window to ensure that the plot
 is made with correct overall proportions.  
+
 try(`dev.off(), silent = T`)  
 `dev.new(width = 8.5, height = 11, units = "in")`
+
 For Mac users, `qartz()` seems to be the way to go. E.g.:
 `quartz(width = 8.5, height = 11)`
+
 
 **Now for the plot itself:**  
 ```{r cowAtoF,fig.height=11, fig.width=8.5}
