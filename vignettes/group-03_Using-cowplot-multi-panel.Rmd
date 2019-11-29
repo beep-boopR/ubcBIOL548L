@@ -292,7 +292,7 @@ fig_A
 ```
 
 ### Figure 3 Panel B:
-```{r panel_B, echo=FALSE, fig.height=2.16, fig.width=2.16, message=FALSE, warning=FALSE}
+```{r panel_B, echo=FALSE, fig.height=3.5, fig.width=3.5, message=FALSE, warning=FALSE}
 ## Build the theme
 theme_548 <- theme_classic() +
     theme(
@@ -384,7 +384,7 @@ fig_B
 ```
 
 ### Figure 3 Panel C:
-```{r panel_C, echo=FALSE, fig.height=2.16, fig.width=2.16, warning=FALSE, message=FALSE}
+```{r panel_C, echo=FALSE, fig.height=3.5, fig.width=3.5, warning=FALSE, message=FALSE}
 data_C_raw <- read_csv("Fig3C_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
@@ -454,7 +454,7 @@ fig_C
 ```
 
 ### Figure 3 Panel D:
-```{r panel_D, echo=FALSE, fig.height=2.16, fig.width=2.16,  warning=FALSE,message=FALSE}
+```{r panel_D, echo=FALSE, fig.height=3.5, fig.width=3.5,  warning=FALSE,message=FALSE}
 data_D <- read_csv("Fig3D_data.csv") %>%
   mutate(
     perc_firing = perc_firing * 100,
@@ -668,7 +668,7 @@ One neat trick is that using a negative number within `rel_heights` reduces
 space between plots (or elements). We can use this to reduce the gap between
 panels if we don't like how `cowplot` handles things by default.
 
-```{r cow_BC, fig.height=3, fig.width=3}
+```{r cow_BC, fig.height=4, fig.width=4}
 cow_BC <- plot_grid(NULL, fig_B, NULL, fig_C,
                     # A negative rel_height shrinks space between elements
                     rel_heights = c(0.1, 1, -0.15, 1),
@@ -684,7 +684,7 @@ cow_BC
 Similarly, with panel D, we'll add a `NULL` object to the cowplot and adjust the 
 relative heights to the proportions we'd like.  
 
-```{r cow_D, fig.height=3, fig.width=3}
+```{r cow_D, fig.height=4, fig.width=4}
 fig_D <- fig_D + labs(y = "Number of speed bins above threshold    ")
 cow_D <- plot_grid(NULL, fig_D,
                     rel_heights = c(0.1, 1.85),
