@@ -233,7 +233,7 @@ that generates each plot. To see the code for each plot that follows, please see
 [Part 2's vignette](https://beep-boopr.github.io/ubcBIOL548L/articles/group-02.html).
 
 #### Figure 3 Panel A:
-```{r panel_A, echo=FALSE, warning=FALSE,message=FALSE}
+```{r panel_A, echo=FALSE, fig.height=2.16, fig.width=3.5, message=FALSE, warning=FALSE}
 # First, import data
 fig_A <-
   read_csv("./Fig3A_data.csv") %>%
@@ -292,7 +292,7 @@ fig_A
 ```
 
 ### Figure 3 Panel B:
-```{r panel_B, echo=FALSE, warning=FALSE,message=FALSE}
+```{r panel_B, echo=FALSE, fig.height=2.16, fig.width=2.16, message=FALSE, warning=FALSE}
 ## Build the theme
 theme_548 <- theme_classic() +
     theme(
@@ -384,7 +384,7 @@ fig_B
 ```
 
 ### Figure 3 Panel C:
-```{r panel_C, echo=FALSE, warning=FALSE,message=FALSE}
+```{r panel_C, echo=FALSE, fig.height=2.16, fig.width=2.16, warning=FALSE, message=FALSE}
 data_C_raw <- read_csv("Fig3C_data.csv") %>%
   gather(key = bin, value = count, starts_with("bin")) %>%
   group_by(trial, direction, speed) %>%
