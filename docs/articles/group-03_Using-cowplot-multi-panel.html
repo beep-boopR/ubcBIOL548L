@@ -88,7 +88,7 @@
       <h1>Part 3: Using cowplot to construct multi-panel figures entirely via code</h1>
                         <h4 class="author">by Vikram B. Baliga, Andrea Gaede and Shreeram Senthivasan</h4>
             
-            <h4 class="date">Last updated on 2019-10-31 14:42:07</h4>
+            <h4 class="date">Last updated on 2019-11-29 09:40:31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/beep-boopR/ubcBIOL548L/blob/master/vignettes/group-03_Using-cowplot-multi-panel.Rmd"><code>vignettes/group-03_Using-cowplot-multi-panel.Rmd</code></a></small>
       <div class="hidden name"><code>group-03_Using-cowplot-multi-panel.Rmd</code></div>
@@ -174,12 +174,13 @@
 <div id="data-sets" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-sets" class="anchor"></a>Data sets</h3>
-<p>You can get all data used in this vignette (and the other two!) by downloading <a href="https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip">this zip file</a>.</p>
+<p>You can get all data used in this vignette (and the other two vignettes!) by downloading <a href="https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip">this zip file</a>.</p>
 <div id="prep-work-for-figure-legends" class="section level4">
 <h4 class="hasAnchor">
 <a href="#prep-work-for-figure-legends" class="anchor"></a>Prep work for figure legends:</h4>
 <p>In prep for creating the figure, we will use the code below to import the bird head icons that appear in the legend of each panel. Please note that these images were drawn beforehand and saved as PNG files.</p>
 <p>We will also assign each species a distinct color and create colored rectangles that will also be part of the panel legends.</p>
+<p>When these lines run, nothing will be plotted. We’re simply importing or creating these objects so that they’re loaded in the Environment.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">## Bird head icons</span></a>
 <a class="sourceLine" id="cb2-2" title="2">icon_hb &lt;-<span class="st"> "hummingbird.png"</span></a>
 <a class="sourceLine" id="cb2-3" title="3">icon_zb &lt;-<span class="st"> "zeebie.png"</span></a>
@@ -228,32 +229,32 @@
 <div id="figure-3-panel-a" class="section level4">
 <h4 class="hasAnchor">
 <a href="#figure-3-panel-a" class="anchor"></a>Figure 3 Panel A:</h4>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_A-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_A-1.png" width="336"></p>
 </div>
 <div id="figure-3-panel-b" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3-panel-b" class="anchor"></a>Figure 3 Panel B:</h3>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_B-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_B-1.png" width="207.36"></p>
 </div>
 <div id="figure-3-panel-c" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3-panel-c" class="anchor"></a>Figure 3 Panel C:</h3>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_C-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_C-1.png" width="207.36"></p>
 </div>
 <div id="figure-3-panel-d" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3-panel-d" class="anchor"></a>Figure 3 Panel D:</h3>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_D-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_D-1.png" width="207.36"></p>
 </div>
 <div id="figure-3-panel-e" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3-panel-e" class="anchor"></a>Figure 3 Panel E:</h3>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_E-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_E-1.png" width="336"></p>
 </div>
 <div id="figure-3-panel-f" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3-panel-f" class="anchor"></a>Figure 3 Panel F:</h3>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_F-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/panel_F-1.png" width="336"></p>
 </div>
 </div>
 <div id="a-quick-intro-to-cowplot" class="section level2">
@@ -338,7 +339,7 @@ When combining B and C, we should note that C has an x-axis label but B does not
 <a class="sourceLine" id="cb12-8" title="8">                    <span class="dt">label_fontfamily =</span> <span class="st">"sans"</span>)</a>
 <a class="sourceLine" id="cb12-9" title="9">cow_BC</a>
 <a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a></code></pre></div>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_BC-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_BC-1.png" width="288"></p>
 <p><strong>Panel D</strong><br>
 Similarly, with panel D, we’ll add a <code>NULL</code> object to the cowplot and adjust the relative heights to the proportions we’d like.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">fig_D &lt;-<span class="st"> </span>fig_D <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">"Number of speed bins above threshold    "</span>)</a>
@@ -353,7 +354,7 @@ Similarly, with panel D, we’ll add a <code>NULL</code> object to the cowplot a
 <a class="sourceLine" id="cb13-10" title="10"><span class="co">#&gt; Warning: Removed 770 rows containing missing values (geom_point).</span></a>
 <a class="sourceLine" id="cb13-11" title="11">cow_D</a>
 <a class="sourceLine" id="cb13-12" title="12"><span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_text).</span></a></code></pre></div>
-<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_D-1.png" width="700"></p>
+<p><img src="group-03_Using-cowplot-multi-panel_files/figure-html/cow_D-1.png" width="288"></p>
 <p><strong>You can cowplot multiple cowplots</strong></p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">cow_BCD &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_BC, cow_D,</a>
 <a class="sourceLine" id="cb14-2" title="2">                     <span class="dt">rel_widths =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>,<span class="dv">3</span>),</a>
@@ -367,8 +368,9 @@ Similarly, with panel D, we’ll add a <code>NULL</code> object to the cowplot a
 <div id="combine-all-the-sets-of-panels-together" class="section level2">
 <h2 class="hasAnchor">
 <a href="#combine-all-the-sets-of-panels-together" class="anchor"></a>Combine all the sets of panels together</h2>
-<p>It may help to specify the dimensions of the plot window to ensure that the plot is made with correct overall proportions.<br>
-try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDevices/dev.html">dev.new(width = 8, height = 11, units = "in")</a></code></p>
+<p>It may help to specify the dimensions of the plot window to ensure that the plot is made with correct overall proportions.</p>
+<p>try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDevices/dev.html">dev.new(width = 8.5, height = 11, units = "in")</a></code></p>
+<p>For Mac users, <code>qartz()</code> seems to be the way to go. E.g.: <code><a href="https://rdrr.io/r/grDevices/quartz.html">quartz(width = 8.5, height = 11)</a></code></p>
 <p><strong>Now for the plot itself:</strong></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">cow_A2F &lt;-<span class="st"> </span><span class="kw">plot_grid</span>(cow_A, <span class="ot">NULL</span>, cow_BCD, cow_EF,</a>
 <a class="sourceLine" id="cb15-2" title="2">          <span class="dt">ncol =</span> <span class="dv">1</span>,</a>
@@ -432,9 +434,7 @@ try(<code>dev.off(), silent = T</code>)<br><code><a href="https://rdrr.io/r/grDe
 <a href="#a2-using-photographs-with-ggplotcowplot" class="anchor"></a>A2: Using photographs with ggplot/cowplot</h3>
 <p>Often, you may opt to add a photograph as its own panel.</p>
 <p><strong>Here’s a quick example:</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">photo &lt;-<span class="st"> "./photo.jpg"</span></a>
-<a class="sourceLine" id="cb17-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/getwd.html">getwd</a></span>()</a>
-<a class="sourceLine" id="cb17-3" title="3"><span class="co">#&gt; [1] "C:/Dropbox/BIOL548L/UBC-BIOL548L/vignettes"</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">photo &lt;-<span class="st"> "./photo.jpg"</span></a></code></pre></div>
 <p><strong>Now create a ggplot object that features only the image.</strong></p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">photo_panel &lt;-<span class="st"> </span><span class="kw">ggdraw</span>() <span class="op">+</span><span class="st"> </span><span class="kw">draw_image</span>(photo, <span class="dt">scale =</span> <span class="fl">0.8</span>)</a>
 <a class="sourceLine" id="cb18-2" title="2">photo_panel</a></code></pre></div>
