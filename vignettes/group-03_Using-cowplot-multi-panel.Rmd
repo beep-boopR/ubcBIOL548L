@@ -169,8 +169,8 @@ package.check <- lapply(
 
 ### Data sets
 
-You can get all data used in this vignette (and the other two!) by downloading 
-[this zip file](https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip).
+You can get all data used in this vignette (and the other two vignettes!) by 
+downloading [this zip file](https://github.com/beep-boopR/ubcBIOL548L/raw/master/inst/extdata/UBC-BIOL548L_data_files.zip).
 
 #### Prep work for figure legends:
 
@@ -180,6 +180,9 @@ images were drawn beforehand and saved as PNG files.
 
 We will also assign each species a distinct color and create colored rectangles
 that will also be part of the panel legends.
+
+When these lines run, nothing will be plotted. We're simply importing or 
+creating these objects so that they're loaded in the Environment.
 
 ```{r import_grobs}
 ## Bird head icons
@@ -707,7 +710,9 @@ cow_BCD
 It may help to specify the dimensions of the plot window to ensure that the plot
 is made with correct overall proportions.  
 try(`dev.off(), silent = T`)  
-`dev.new(width = 8, height = 11, units = "in")`
+`dev.new(width = 8.5, height = 11, units = "in")`
+For Mac users, `qartz()` seems to be the way to go. E.g.:
+`quartz(width = 8.5, height = 11)`
 
 **Now for the plot itself:**  
 ```{r cowAtoF,fig.height=11, fig.width=8.5}
@@ -792,7 +797,6 @@ Often, you may opt to add a photograph as its own panel.
 **Here's a quick example:**
 ```{r import_photo}
 photo <- "./photo.jpg"
-getwd()
 ```
 
 **Now create a ggplot object that features only the image.**
