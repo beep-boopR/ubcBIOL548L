@@ -481,7 +481,7 @@ fig_D
 ```
 
 ### Figure 3 Panel E:
-```{r panel_E, fig.height=2.16, fig.width=3.5, echo=FALSE, warning=FALSE,message=FALSE}
+```{r panel_E, fig.height=2.16, fig.width=4.5, echo=FALSE, warning=FALSE,message=FALSE}
 data_E <- read_csv("./Fig3E_data.csv") %>%
   mutate(species = c("hb", "zb", "pg")) %>%
   gather(key = speed, value = prop, -species)
@@ -520,7 +520,7 @@ fig_E
 ```
 
 ### Figure 3 Panel F:
-```{r panel_F, echo=FALSE, fig.height=2.16, fig.width=3.5, warning=FALSE,message=FALSE}
+```{r panel_F, echo=FALSE, fig.height=2.16, fig.width=4.5, warning=FALSE,message=FALSE}
 speeds_F <- c(0.24,0.5,1,2,4,8,16,24,32,48,64,80)
 data_F <- read_csv("./Fig3F_data.csv") %>%
   filter(!is.na(dir1.area))  %>%
